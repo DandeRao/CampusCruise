@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements SKMapsInitializat
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        SKMaps.getInstance().initializeSKMaps(getApplication(), MainActivity.this);
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             hasAccesstoLocationServices = false;
             ActivityCompat.requestPermissions(this, new String[] {
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements SKMapsInitializat
             else{hasAccesstoLocationServices= true;}
         }
 
-        SKMaps.getInstance().initializeSKMaps(getApplication(), MainActivity.this);
+
 
 
         mainActivity_launchTour = (Button) findViewById(R.id.mainActivity_launchTour);
