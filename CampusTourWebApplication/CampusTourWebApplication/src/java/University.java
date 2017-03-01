@@ -27,7 +27,7 @@ public class University {
      */
     public University() {
     }
-    private String univName;
+    String univName;
     private String user;
 
     public String getPassword() {
@@ -85,6 +85,26 @@ public class University {
                 rs.next();
                 int count = rs.getInt(1);
                
+                st.executeUpdate("insert into university values('"+(count+1)+"','"+this.getUnivName()+"','"+this.getUser()+"','"+this.getPassword()+"','"+this.getUniversityLattitude()+"','"+this.getUniversityLongitude()+"')");
+                
+        }
+        catch(Exception e){
+            
+        }
+        return "inserted";
+    }
+    public String updateUniversity(){
+        try{
+                
+                Class.forName("com.mysql.jdbc.Driver");
+                Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","");
+                
+                Statement st = con.createStatement();
+                 st.executeUpdate("insert into user values('"+this.getUser()+"','"+this.getPassword()+"','user')");
+                ResultSet rs = st.executeQuery("select max(university_id) from university");
+                rs.next();
+                int count = rs.getInt(1);
+               
                 st.executeUpdate("insert into university values('"+(count+1)+"','"+this.getUnivName()+"','"+this.getUser()+"','"+this.getUniversityLattitude()+"','"+this.getUniversityLongitude()+"')");
                 
         }
@@ -93,6 +113,5 @@ public class University {
         }
         return "inserted";
     }
-    
 }
 

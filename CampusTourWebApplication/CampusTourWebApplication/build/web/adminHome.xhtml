@@ -52,22 +52,24 @@
                     <f:facet name="header">
     			
                     </f:facet>
-                    <a href="/Campus_Tour_Web_Application/faces/AddUniversity.xhtml">Edit</a>
+                    <h:form>
+                        <h:commandButton value="Edit" action ="#{databaseConnection.getUniversityDetails(c.univName)}" ></h:commandButton> 
+                        
+                    </h:form>
+                    
     		</h:column>
 
  		<h:column>
     			<f:facet name="header">
     				
 				</f:facet>
-    				Delete
+    				<h:form>
+                        <h:commandButton value="Delete" action ="#{databaseConnection.deleteUniversityDetails(c.univName)}" ></h:commandButton> 
+                        
+                    </h:form>
     		</h:column>
 
-    		<h:column>
-    			<f:facet name="header">
-    				
-				</f:facet>
-    				Update
-    		</h:column>
+    		
 
     	</h:dataTable>
         <a href="/CampusTourWebApplication/faces/AddUniversity.xhtml">+Add University</a>
