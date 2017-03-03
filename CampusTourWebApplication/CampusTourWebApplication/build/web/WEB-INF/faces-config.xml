@@ -38,9 +38,16 @@
         </navigation-case>
         <navigation-case>
             <from-view-id>adminHome.xhtml</from-view-id>
-            <from-action>#{databaseConnection.getUniversityDetails(c.univName)}</from-action>
+            <from-action>#{university.getUniversityDetails(c.univName)}</from-action>
             <from-outcome>edit</from-outcome>
             <to-view-id>EditUniversity.xhtml</to-view-id>
+            
+        </navigation-case>
+         <navigation-case>
+            <from-view-id>EditUniversity.xhtml</from-view-id>
+            <from-action>#{University.updateUniversity()}</from-action>
+            <from-outcome>updated</from-outcome>
+            <to-view-id>successPage.xhtml</to-view-id>
             
         </navigation-case>
         <navigation-case>

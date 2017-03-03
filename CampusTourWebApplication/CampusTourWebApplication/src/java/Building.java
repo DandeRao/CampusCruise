@@ -108,6 +108,7 @@ public class Building {
         }
         return "inserted";
     }
+    
     public List<Building> buildingsList(){
         buildingsList.clear();
         

@@ -45,19 +45,19 @@ and open the template in the editor.
             <h:outputText value="#{loginValidation.outputMessage}"></h:outputText>
             <h:form>
             <h1><span id="heading">Edit University</span></h1>
-            <h:inputText a:placeholder="University Name" styleClass="txfld"  value="#{databaseConnection.editUniversityDetails().univName}" ></h:inputText>
+            <h:inputText a:placeholder="University Name" styleClass="txfld"  value="#{university.editUniversityDetails().univName}"></h:inputText>
             <br></br>
-            <h:inputText a:placeholder="Email Of User" styleClass="txfld"  value="#{databaseConnection.editUniversityDetails().user}" ></h:inputText>
+            <h:inputText a:placeholder="Email Of User" styleClass="txfld"  value="#{university.editUniversityDetails().user}" ></h:inputText>
             <br></br>
-            <h:inputText a:placeholder="Password Of User" styleClass="txfld"  value="#{databaseConnection.editUniversityDetails().password}" ></h:inputText>
+            <h:inputText a:placeholder="Password Of User" styleClass="txfld"  value="#{university.editUniversityDetails().password}" ></h:inputText>
             <br></br>
            
-            <h:inputText a:placeholder="Lattitude" styleClass="txfld"  value="#{databaseConnection.editUniversityDetails().universityLattitude}" ></h:inputText>
+            <h:inputText a:placeholder="Lattitude" styleClass="txfld"  value="#{university.editUniversityDetails().universityLattitude}" ></h:inputText>
             <br></br>
-            <h:inputText a:placeholder="Longitude" styleClass="txfld"  value="#{databaseConnection.editUniversityDetails().universityLongitude}" ></h:inputText>
+            <h:inputText a:placeholder="Longitude" styleClass="txfld"  value="#{university.editUniversityDetails().universityLongitude}" ></h:inputText>
             <br></br>
             
-            <h:commandButton value="Edit University!" action ="#{databaseConnection.updateUniversity()}" styleClass="lgnBTN"></h:commandButton>
+            <h:commandButton value="Edit University!" action ="#{university.updateUniversity()}" styleClass="lgnBTN"></h:commandButton>
                 
         </h:form>
         </div>

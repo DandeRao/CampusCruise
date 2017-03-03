@@ -3,10 +3,19 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/S525890/Documents/CrazyCoders/CampusTourWebApplication/CampusTourWebApplication/web/successPage.xhtml</file>
             <file>file:/C:/Users/S525890/Documents/CrazyCoders/CampusTourWebApplication/CampusTourWebApplication/src/java/Building.java</file>
-            <file>file:/C:/Users/S525890/Documents/CrazyCoders/CampusTourWebApplication/CampusTourWebApplication/src/java/AuthorizationListener.java</file>
-            <file>file:/C:/Users/S525890/Documents/CrazyCoders/CampusTourWebApplication/CampusTourWebApplication/src/java/LoginValidation.java</file>
+            <file>file:/C:/Users/S525890/Documents/CrazyCoders/CampusTourWebApplication/CampusTourWebApplication/web/login.xhtml</file>
+            <file>file:/C:/Users/S525890/Documents/CrazyCoders/CampusTourWebApplication/CampusTourWebApplication/web/EditBuilding.xhtml</file>
+            <file>file:/C:/Users/S525890/Documents/CrazyCoders/CampusTourWebApplication/CampusTourWebApplication/web/userHome.xhtml</file>
+            <file>file:/C:/Users/S525890/Documents/CrazyCoders/CampusTourWebApplication/CampusTourWebApplication/src/java/University.java</file>
             <file>file:/C:/Users/S525890/Documents/CrazyCoders/CampusTourWebApplication/CampusTourWebApplication/web/WEB-INF/faces-config.xml</file>
+            <file>file:/C:/Users/S525890/Documents/CrazyCoders/CampusTourWebApplication/CampusTourWebApplication/src/java/databaseConnection.java</file>
+            <file>file:/C:/Users/S525890/Documents/CrazyCoders/CampusTourWebApplication/CampusTourWebApplication/web/viewBuilding.xhtml</file>
+            <file>file:/C:/Users/S525890/Documents/CrazyCoders/CampusTourWebApplication/CampusTourWebApplication/web/adminHome.xhtml</file>
+            <file>file:/C:/Users/S525890/Documents/CrazyCoders/CampusTourWebApplication/CampusTourWebApplication/web/AddUniversity.xhtml</file>
+            <file>file:/C:/Users/S525890/Documents/CrazyCoders/CampusTourWebApplication/CampusTourWebApplication/web/EditUniversity.xhtml</file>
+            <file>file:/C:/Users/S525890/Documents/CrazyCoders/CampusTourWebApplication/CampusTourWebApplication/src/java/LoginValidation.java</file>
         </group>
     </open-files>
 </project-private>

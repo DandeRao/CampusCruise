@@ -64,11 +64,7 @@ public class databaseConnection {
         }
         return universityList;
     }
-    public String getUniversityDetails(String universityName){
-        session.setAttribute("editUnivName",universityName);
-        System.out.println(universityName);
-        return "edit";
-    }
+    
     public String getBuildingDetails(String buildingName){
         session.setAttribute("editbuildingName",buildingName);
         System.out.println(buildingName);
@@ -78,27 +74,7 @@ public class databaseConnection {
         session.setAttribute("deleteUnivName",universityName);
         return "delete";
     }
-    public University editUniversityDetails(){
-        University un = new University();
-        try{
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","");
-            Statement st = con.createStatement();
-            String a = (String) session.getAttribute("editUnivName");
-            ResultSet rs = st.executeQuery("select * from university where university_name = '"+a+"'");
-            rs.next();
-            un.setUnivName(rs.getString("university_name"));
-            un.setUniversityLattitude(rs.getInt("university_lattitude"));
-            un.setUniversityLongitude(rs.getInt("university_longitude"));
-            un.setUser(rs.getString("email"));
-            un.setPassword(rs.getString("password"));
-            con.close();
-        }catch(Exception e){
-            
-        }
-      //  session.removeAttribute("editUnivName");
-        return un;
-    }
+    
     public Building editBuildingDetails(){
         Building b = new Building();
         try{
@@ -137,6 +113,7 @@ public class databaseConnection {
         }
         return "delete";
     }
+    
    
     
     
