@@ -183,8 +183,8 @@ class SKToolsMapOperationsManager {
         mapSettings.setMapRotationEnabled(true);
         mapView.getMapSettings().setCompassShown(true);
         mapView.getMapSettings().setFollowPositions(false);
-        mapView.getMapSettings().setHeadingMode(SKMapSettings.SKHeadingMode.ROUTE);
-        mapView.getMapSettings().setMapDisplayMode(SKMapSettings.SKMapDisplayMode.MODE_2D);
+        mapView.getMapSettings().setHeadingMode(SKMapSettings.SKHeadingMode.ROTATING_MAP);
+        mapView.getMapSettings().setMapDisplayMode(SKMapSettings.SKMapDisplayMode.MODE_3D);
     }
 
 
@@ -194,7 +194,7 @@ class SKToolsMapOperationsManager {
     public void setMapInNavigationMode() {
         mapView.setZoom(zoomBeforeSwitch);
         mapView.getMapSettings().setMapZoomingEnabled(false);
-        mapView.getMapSettings().setHeadingMode(SKMapSettings.SKHeadingMode.ROUTE);
+        mapView.getMapSettings().setHeadingMode(SKMapSettings.SKHeadingMode.ROTATING_MAP);
         mapView.getMapSettings().setFollowPositions(true);
 
 
