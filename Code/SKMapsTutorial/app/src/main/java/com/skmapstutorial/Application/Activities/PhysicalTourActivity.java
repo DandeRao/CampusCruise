@@ -56,6 +56,7 @@ import com.skobbler.ngx.sdktools.navigationui.SKToolsAdvicePlayer;
 import com.skobbler.ngx.sdktools.navigationui.SKToolsNavigationConfiguration;
 import com.skobbler.ngx.sdktools.navigationui.SKToolsNavigationListener;
 import com.skobbler.ngx.sdktools.navigationui.SKToolsNavigationManager;
+import com.skobbler.ngx.sdktools.navigationui.SKToolsNavigationUIManager;
 import com.skobbler.ngx.util.SKLogging;
 
 
@@ -104,6 +105,7 @@ public class PhysicalTourActivity extends AppCompatActivity implements SKMapSurf
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_physical_tour);
+
         app = (SKMapsApplication) getApplication();
         setBuildingNamesInOrderOfTour();
         final SKCurrentPositionProvider currentLocationProvider = new SKCurrentPositionProvider(getApplicationContext());
@@ -183,28 +185,33 @@ public class PhysicalTourActivity extends AppCompatActivity implements SKMapSurf
         SKCoordinate navigationStartCoordinate;
         SKCoordinate navigationEndCoordinate;
         calculateUniversityRadius();
-//        System.out.println("Current Location is: " + currentLocation.toString());
-        if (isUserInUniversity(currentLocation)) {
-            findNearestBuildingToUser(currentLocation);
-            navigationStartCoordinate = currentLocation;
-            navigationEndCoordinate = university.getBuildings().get(0).getBuildingCoordinates();
-            buildingBeingVisited = 0;
+        try {
+            System.out.println("Current Location is: " + currentLocation.toString());
+            if (isUserInUniversity(currentLocation)) {
+                findNearestBuildingToUser(currentLocation);
+                navigationStartCoordinate = currentLocation;
+                navigationEndCoordinate = university.getBuildings().get(0).getBuildingCoordinates();
+                buildingBeingVisited = 0;
 
-        } else {
-            navigationStartCoordinate = currentLocation;
-            navigationEndCoordinate = university.getBuildings().get(0).getBuildingCoordinates();
-            buildingBeingVisited = 0;
+            } else {
+                navigationStartCoordinate = currentLocation;
+                navigationEndCoordinate = university.getBuildings().get(0).getBuildingCoordinates();
+                buildingBeingVisited = 0;
+            }
+            setBuildingNameTextView(buildingBeingVisited);
+            mapView.getMapSettings().setMapDisplayMode(SKMapSettings.SKMapDisplayMode.MODE_3D);
+            //mapView.setZoom(18.0f);
+
+
+            // Uncomment this to use SKNavigationManager
+
+          //  routeSettings(navigationStartCoordinate, navigationEndCoordinate);
+           startNavigation(navigationStartCoordinate,navigationEndCoordinate);
+
         }
-        setBuildingNameTextView(buildingBeingVisited);
-        mapView.getMapSettings().setMapDisplayMode(SKMapSettings.SKMapDisplayMode.MODE_3D);
-        //mapView.setZoom(18.0f);
-
-
-        // Uncomment this to use SKNavigationManager
-
-       routeSettings(navigationStartCoordinate, navigationEndCoordinate);
-
-
+        catch(NullPointerException e){
+            Toast.makeText(PhysicalTourActivity.this," Sorry!! Location Fix not available yet",Toast.LENGTH_LONG).show();
+        }
         //Use the below to use SKToolsNavigationManager
         //startNavigation(navigationStartCoordinate,navigationEndCoordinate);
 
@@ -228,6 +235,7 @@ public class PhysicalTourActivity extends AppCompatActivity implements SKMapSurf
         SKRouteManager.getInstance().setRouteListener(PhysicalTourActivity.this);
         // Pass the route to the calculation routine
         SKRouteManager.getInstance().calculateRoute(route);
+
     }
 
 
@@ -248,10 +256,13 @@ public class PhysicalTourActivity extends AppCompatActivity implements SKMapSurf
         navigationSettings.setNavigationMode(SKNavigationSettings.SKNavigationMode.PEDESTRIAN);
         navigationSettings.setShowRealGPSPositions(true);
 
+
         mapView.setPositionAsCurrent(currentLocation,1.0f,false);
         mapView.setZoom(SKMapSurfaceView.MINIMUM_ZOOM_LEVEL);
-        SKMapSurfaceView navMapView = mapHolder.getMapSurfaceView();
-        navigationManager.setMapView(navMapView);
+        //SKMapSurfaceView navMapView = mapHolder.getMapSurfaceView();
+
+
+
         app.setMapResourcesDirPath(SKMaps.getInstance().getMapInitSettings().getMapResourcesPath());
         SKAdvisorSettings advisorSettings = new SKAdvisorSettings();
         advisorSettings.setLanguage(SKAdvisorSettings.SKAdvisorLanguage.LANGUAGE_EN);
@@ -261,6 +272,12 @@ public class PhysicalTourActivity extends AppCompatActivity implements SKMapSurf
         advisorSettings.setAdvisorType(SKAdvisorSettings.SKAdvisorType.AUDIO_FILES);
         System.out.println("Audio Advisor Settings set? " + SKRouteManager.getInstance().setAdvisorSettings(advisorSettings));
         buildingNameTV.setVisibility(View.VISIBLE);
+
+
+        navigationManager = SKNavigationManager.getInstance();
+        navigationManager.setMapView(mapHolder.getMapSurfaceView());
+
+        navigationManager.setNavigationListener(PhysicalTourActivity.this);
         navigationManager.startNavigation(navigationSettings);
 
     }
@@ -290,9 +307,7 @@ public class PhysicalTourActivity extends AppCompatActivity implements SKMapSurf
         annotation
                 .setAnnotationType(SKAnnotation.SK_ANNOTATION_TYPE_GREEN);
         annotation.setLocation(university.getUniversityLocation());
-        SKAnnotationView annotationView = new SKAnnotationView();
-        mapView.addAnnotation(annotation,
-                SKAnimationSettings.ANIMATION_NONE);
+        mapView.addAnnotation(annotation,SKAnimationSettings.ANIMATION_NONE);
 
         mapView.animateToLocation(university.getUniversityLocation(), 0);
         buildingAnnotations = new ArrayList<>(university.getBuildings().size());
@@ -641,21 +656,22 @@ public class PhysicalTourActivity extends AppCompatActivity implements SKMapSurf
 
                 setBuildingNameTextView(buildingBeingVisited+1);
                 // Uncomment below line to use SKNavigationManager
-                routeSettings(university.getBuildings().get(buildingBeingVisited).getBuildingCoordinates(), university.getBuildings().get(buildingBeingVisited + 1).getBuildingCoordinates());
+              //  routeSettings(university.getBuildings().get(buildingBeingVisited).getBuildingCoordinates(), university.getBuildings().get(buildingBeingVisited + 1).getBuildingCoordinates());
+             //  routeSettings(currentLocation,university.getBuildings().get(buildingBeingVisited + 1).getBuildingCoordinates());
                 skipBuilding.setText("Skip Building");
                 // startNavigation(university.getBuildings().get(buildingBeingVisited).getBuildingCoordinates(), university.getBuildings().get(buildingBeingVisited + 1).getBuildingCoordinates());
-                buildingBeingVisited += 1;
+
 
 
                 //  startNavigation(university.getBuildings().get(buildingBeingVisited).getBuildingCoordinates(), university.getBuildings().get(buildingBeingVisited + 1).getBuildingCoordinates());
-                //  startNavigation(currentLocation,university.getBuildings().get(buildingBeingVisited + 1).getBuildingCoordinates());
-
+                startNavigation(currentLocation,university.getBuildings().get(buildingBeingVisited + 1).getBuildingCoordinates());
+                buildingBeingVisited += 1;
             }
         }else{
             onNavigationEnded();
             removeItemsFromMap();
 
-            SKCoordinateRegion universityRegion = new SKCoordinateRegion(university.getUniversityLocation(),16.0f);
+            SKCoordinateRegion universityRegion = new SKCoordinateRegion(university.getUniversityLocation(),15.5f);
             mapView.changeMapVisibleRegion(universityRegion,true);
             //mapView.zoomInAt(mapView.coordinateToPoint(university.getUniversityLocation()));
             Toast.makeText(this, "Tour Finished Calculating your total activity", Toast.LENGTH_SHORT).show();
@@ -703,6 +719,7 @@ public class PhysicalTourActivity extends AppCompatActivity implements SKMapSurf
     mapView.getMapSettings().setMapDisplayMode(SKMapSettings.SKMapDisplayMode.MODE_2D);
         mapView.setPositionAsCurrent(university.getUniversityLocation(),1.0f,false);
         SKNavigationManager.getInstance().stopNavigation();
+       // skToolsNavigationManager.stopNavigation();
         buildingNameTV.setVisibility(GONE);
 
     }
@@ -722,13 +739,14 @@ public class PhysicalTourActivity extends AppCompatActivity implements SKMapSurf
         skToolsNavigationManager.setNavigationListener(PhysicalTourActivity.this);
         SKToolsNavigationConfiguration configuration = new SKToolsNavigationConfiguration();
 
+
         configuration.setNavigationType(SKNavigationSettings.SKNavigationType.REAL);
         // configuration.setNavigationType(SKNavigationSettings.SKNavigationType.SIMULATION);
         configuration.setStartCoordinate(navigationStartCoordinate);
         configuration.setDestinationCoordinate(navigationEndCoordinate);
-        //configuration.setRouteType(SKRouteSettings.SKRouteMode.PEDESTRIAN);
+
         configuration.setRouteType(SKRouteSettings.SKRouteMode.PEDESTRIAN);
-        app.setMapResourcesDirPath(SKMaps.getInstance().getMapInitSettings().getMapResourcesPath());
+       // app.setMapResourcesDirPath(SKMaps.getInstance().getMapInitSettings().getMapResourcesPath());
         //        SKAdvisorSettings advisorSettings = new SKAdvisorSettings();
         //        advisorSettings.setLanguage(SKAdvisorSettings.SKAdvisorLanguage.LANGUAGE_EN);
         //        advisorSettings.setAdvisorConfigPath(app.getMapResourcesDirPath() +"/Advisor");
@@ -737,7 +755,13 @@ public class PhysicalTourActivity extends AppCompatActivity implements SKMapSurf
         //        advisorSettings.setAdvisorType(SKAdvisorSettings.SKAdvisorType.AUDIO_FILES);
 //        System.out.println("Audio Advisor Settings set? "+SKRouteManager.getInstance().setAdvisorSettings(advisorSettings));
         skToolsNavigationManager.launchRouteCalculation(configuration, mapHolder);
+     //   mapView.getMapSettings().setFollowPositions(true);
         skToolsNavigationManager.startNavigation(configuration, mapHolder);
+
+        SKToolsNavigationUIManager.getInstance().hideBottomAndLeftPanels();
+        SKToolsNavigationUIManager.getInstance().hideSearchingForGPSPanel();
+        SKToolsNavigationUIManager.getInstance().hideSettingsPanel();
+        SKToolsNavigationUIManager.getInstance().hideTopPanels();
     }
 
     @Override
@@ -911,6 +935,7 @@ public class PhysicalTourActivity extends AppCompatActivity implements SKMapSurf
     @Override
     protected void onPause() {
         super.onPause();
+      // mapView.onPause();
         mapHolder.onPause();
         System.out.println("On pause called");
 
@@ -920,6 +945,7 @@ public class PhysicalTourActivity extends AppCompatActivity implements SKMapSurf
     @Override
     protected void onResume() {
         super.onResume();
+       // mapView.onResume();
         mapHolder.onResume();
         System.out.println("on resume called");
 
