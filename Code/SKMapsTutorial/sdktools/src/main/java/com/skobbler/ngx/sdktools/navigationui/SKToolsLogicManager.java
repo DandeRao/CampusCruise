@@ -852,6 +852,7 @@ public class SKToolsLogicManager implements SKMapSurfaceListener, SKNavigationLi
 
     @Override
     public void onDestinationReached() {
+        Toast.makeText(getCurrentActivity().getApplicationContext(), "Destination Reached", Toast.LENGTH_SHORT).show();
 
         if (configuration.getNavigationType() == SKNavigationSettings.SKNavigationType.REAL && configuration
                 .isContinueFreeDriveAfterNavigationEnd()) {

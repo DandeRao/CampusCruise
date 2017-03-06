@@ -1,15 +1,23 @@
 package com.skmapstutorial.Application.Activities;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.nfc.Tag;
+import android.os.Build;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -47,17 +55,24 @@ import com.skobbler.ngx.navigation.SKNavigationState;
 import com.skobbler.ngx.positioner.SKCurrentPositionListener;
 import com.skobbler.ngx.positioner.SKCurrentPositionProvider;
 import com.skobbler.ngx.positioner.SKPosition;
+import com.skobbler.ngx.positioner.SKPositionerManager;
 import com.skobbler.ngx.routing.SKRouteInfo;
 import com.skobbler.ngx.routing.SKRouteJsonAnswer;
 import com.skobbler.ngx.routing.SKRouteListener;
 import com.skobbler.ngx.routing.SKRouteManager;
 import com.skobbler.ngx.routing.SKRouteSettings;
 import com.skobbler.ngx.sdktools.navigationui.SKToolsAdvicePlayer;
+
+import com.skobbler.ngx.sdktools.navigationui.SKToolsMapOperationsManager;
 import com.skobbler.ngx.sdktools.navigationui.SKToolsNavigationConfiguration;
 import com.skobbler.ngx.sdktools.navigationui.SKToolsNavigationListener;
 import com.skobbler.ngx.sdktools.navigationui.SKToolsNavigationManager;
 import com.skobbler.ngx.sdktools.navigationui.SKToolsNavigationUIManager;
+
+import com.skobbler.ngx.sdktools.navigationui.autonight.SKToolsAutoNightManager;
+import com.skobbler.ngx.trail.SKTrailSettings;
 import com.skobbler.ngx.util.SKLogging;
+
 
 
 import java.io.IOException;
@@ -67,9 +82,10 @@ import java.util.Collections;
 
 import static android.view.View.GONE;
 
-public class PhysicalTourActivity extends AppCompatActivity implements SKMapSurfaceListener, SKRouteListener, SKNavigationListener, SKToolsNavigationListener, SKCurrentPositionListener {
-
+public class PhysicalTourActivity extends AppCompatActivity implements SensorEventListener,SKMapSurfaceListener, SKRouteListener, SKNavigationListener, SKToolsNavigationListener, SKCurrentPositionListener {
+    Activity currentActivity;
     // private SKToolsNavigationManager navigationManager;
+    SKCurrentPositionProvider currentPositionProvider;
     RelativeLayout navigationUI;
     University university;
     int nearestBuilingToUserId;
@@ -81,10 +97,20 @@ public class PhysicalTourActivity extends AppCompatActivity implements SKMapSurf
     Button QRScanButton;
     TextView buildingNameTV;
     SKCoordinate currentLocation;
+    float[] orientationValues;
+    long lastTimeWhenReceivedGpsSignal;
+    float currentCompassValue;
+    int lastExactScreenOrientation = -1;
+    static final int MINIMUM_TIME_UNTILL_MAP_CAN_BE_UPDATED = 30;
+    static final float SMOOTH_FACTOR_COMPASS = 0.1f;
+    boolean headingOn;
+
 
     SKNavigationSettings navigationSettings = new SKNavigationSettings();
     SKNavigationManager navigationManager = SKNavigationManager.getInstance();
     SKToolsNavigationManager skToolsNavigationManager;
+
+
 
     int buildingBeingVisited;
     SKMapsApplication app;
@@ -106,18 +132,22 @@ public class PhysicalTourActivity extends AppCompatActivity implements SKMapSurf
 
         setContentView(R.layout.activity_physical_tour);
 
+
+        currentPositionProvider = new SKCurrentPositionProvider(getApplicationContext());
+        if (Dialogue_Utilites.hasGpsModule(getApplicationContext())) {
+            currentPositionProvider.requestLocationUpdates(true, false, true);
+        } else if (Dialogue_Utilites.hasNetworkModule(getApplicationContext())) {
+            currentPositionProvider.requestLocationUpdates(false, true, true);
+        }
+        currentPositionProvider.setCurrentPositionListener(this);
+
         app = (SKMapsApplication) getApplication();
         setBuildingNamesInOrderOfTour();
-        final SKCurrentPositionProvider currentLocationProvider = new SKCurrentPositionProvider(getApplicationContext());
-        currentLocationProvider.setCurrentPositionListener(this);
-        currentLocationProvider.requestLocationUpdates(true, true, true);
-
-
-        mapHolder = (SKMapViewHolder)
+          mapHolder = (SKMapViewHolder)
                 findViewById(R.id.map_surface_holder);
         mapHolder.setMapSurfaceListener(this);
 
-        mapView = mapHolder.getMapSurfaceView();
+        //mapView = mapHolder.getMapSurfaceView();
 
 
         final SKMapsApplication skMapsApplication = (SKMapsApplication) getApplicationContext();
@@ -182,6 +212,7 @@ public class PhysicalTourActivity extends AppCompatActivity implements SKMapSurf
     }
 
     public void firstTimeRouteSettings() {
+        currentPositionProvider.requestUpdateFromLastPosition();
         SKCoordinate navigationStartCoordinate;
         SKCoordinate navigationEndCoordinate;
         calculateUniversityRadius();
@@ -205,8 +236,8 @@ public class PhysicalTourActivity extends AppCompatActivity implements SKMapSurf
 
             // Uncomment this to use SKNavigationManager
 
-          //  routeSettings(navigationStartCoordinate, navigationEndCoordinate);
-           startNavigation(navigationStartCoordinate,navigationEndCoordinate);
+            routeSettings(navigationStartCoordinate, navigationEndCoordinate);
+          // startNavigation(navigationStartCoordinate,navigationEndCoordinate);
 
         }
         catch(NullPointerException e){
@@ -230,11 +261,16 @@ public class PhysicalTourActivity extends AppCompatActivity implements SKMapSurf
         route.setRouteMode(SKRouteSettings.SKRouteMode.PEDESTRIAN);
         // Set whether the route should be shown on the map after it's computed
         route.setRouteExposed(true);
+
+
+        SKTrailSettings trailType = new SKTrailSettings();
+        trailType.setPedestrianTrailEnabled(true, 1);
         // Set the route listener to be notified of route calculation
         // events
         SKRouteManager.getInstance().setRouteListener(PhysicalTourActivity.this);
         // Pass the route to the calculation routine
         SKRouteManager.getInstance().calculateRoute(route);
+
 
     }
 
@@ -242,13 +278,13 @@ public class PhysicalTourActivity extends AppCompatActivity implements SKMapSurf
     @Override
     public void onAllRoutesCompleted() {
         startNavigationUsingNavigationManager();
-
+  //  copiedNavigation();
     }
 
     public void startNavigationUsingNavigationManager() {
 
 
-        //navigationManager.setNavigationListener(PhysicalTourActivity.this);
+        navigationManager.setNavigationListener(PhysicalTourActivity.this);
 
 
         //navigationSettings.setCcpAsCurrentPosition(true);
@@ -257,7 +293,7 @@ public class PhysicalTourActivity extends AppCompatActivity implements SKMapSurf
         navigationSettings.setShowRealGPSPositions(true);
 
 
-        mapView.setPositionAsCurrent(currentLocation,1.0f,false);
+       // mapView.setPositionAsCurrent(currentLocation,1.0f,false);
         mapView.setZoom(SKMapSurfaceView.MINIMUM_ZOOM_LEVEL);
         //SKMapSurfaceView navMapView = mapHolder.getMapSurfaceView();
 
@@ -273,12 +309,18 @@ public class PhysicalTourActivity extends AppCompatActivity implements SKMapSurf
         System.out.println("Audio Advisor Settings set? " + SKRouteManager.getInstance().setAdvisorSettings(advisorSettings));
         buildingNameTV.setVisibility(View.VISIBLE);
 
+       // SKToolsMapOperationsManager.getInstance().setMapView(mapView);
+        mapView.getMapSettings().setFollowPositions(true);
+        mapView.getMapSettings().setHeadingMode(SKMapSettings.SKHeadingMode.HISTORIC_POSITIONS);
+
 
         navigationManager = SKNavigationManager.getInstance();
-        navigationManager.setMapView(mapHolder.getMapSurfaceView());
-
+        navigationManager.setMapView(mapView);
+        currentPositionProvider.requestUpdateFromLastPosition();
         navigationManager.setNavigationListener(PhysicalTourActivity.this);
+        setHeading(true);
         navigationManager.startNavigation(navigationSettings);
+
 
     }
 
@@ -645,6 +687,7 @@ public class PhysicalTourActivity extends AppCompatActivity implements SKMapSurf
     }
 
     public void routeToNextBuilding(){
+        currentPositionProvider.requestUpdateFromLastPosition();
         if (buildingBeingVisited < university.getBuildings().size() - 1) {
             if (!university.getBuildings().get(buildingBeingVisited + 1).isVisited()) {
 
@@ -656,15 +699,15 @@ public class PhysicalTourActivity extends AppCompatActivity implements SKMapSurf
 
                 setBuildingNameTextView(buildingBeingVisited+1);
                 // Uncomment below line to use SKNavigationManager
-              //  routeSettings(university.getBuildings().get(buildingBeingVisited).getBuildingCoordinates(), university.getBuildings().get(buildingBeingVisited + 1).getBuildingCoordinates());
-             //  routeSettings(currentLocation,university.getBuildings().get(buildingBeingVisited + 1).getBuildingCoordinates());
+             //   routeSettings(university.getBuildings().get(buildingBeingVisited).getBuildingCoordinates(), university.getBuildings().get(buildingBeingVisited + 1).getBuildingCoordinates());
+               routeSettings(currentLocation,university.getBuildings().get(buildingBeingVisited + 1).getBuildingCoordinates());
                 skipBuilding.setText("Skip Building");
                 // startNavigation(university.getBuildings().get(buildingBeingVisited).getBuildingCoordinates(), university.getBuildings().get(buildingBeingVisited + 1).getBuildingCoordinates());
 
 
 
                 //  startNavigation(university.getBuildings().get(buildingBeingVisited).getBuildingCoordinates(), university.getBuildings().get(buildingBeingVisited + 1).getBuildingCoordinates());
-                startNavigation(currentLocation,university.getBuildings().get(buildingBeingVisited + 1).getBuildingCoordinates());
+               // startNavigation(currentLocation,university.getBuildings().get(buildingBeingVisited + 1).getBuildingCoordinates());
                 buildingBeingVisited += 1;
             }
         }else{
@@ -682,6 +725,7 @@ public class PhysicalTourActivity extends AppCompatActivity implements SKMapSurf
 
     @Override
     public void onDestinationReached() {
+        setHeading(false);
         Toast.makeText(this, "Destination Reached", Toast.LENGTH_SHORT).show();
         Dialogue_Utilites.showBuildingDetialsDialouge(this);
         // Scan QR code Here
@@ -724,10 +768,42 @@ public class PhysicalTourActivity extends AppCompatActivity implements SKMapSurf
 
     }
 
+    private void setHeading(boolean enabled) {
+        if (enabled) {
+            headingOn = true;
+            mapView.getMapSettings().setHeadingMode(SKMapSettings.SKHeadingMode.ROTATING_MAP);
+            startOrientationSensor();
+        } else {
+            headingOn = false;
+            mapView.getMapSettings().setHeadingMode(SKMapSettings.SKHeadingMode.NONE);
+            stopOrientationSensor();
+        }
+    }
+
+    /**
+     * Activates the orientation sensor
+     */
+    private void startOrientationSensor() {
+        orientationValues = new float[3];
+        SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        Sensor orientationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
+        sensorManager.registerListener(this, orientationSensor, SensorManager.SENSOR_DELAY_UI);
+    }
+
+    /**
+     * Deactivates the orientation sensor
+     */
+    private void stopOrientationSensor() {
+        orientationValues = null;
+        SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        sensorManager.unregisterListener(this);
+    }
 
     @Override
     public void onCurrentPositionUpdate(SKPosition skPosition) {
         currentLocation = skPosition.getCoordinate();
+        System.out.println("Location Update Received"+currentLocation.toString());
+        SKPositionerManager.getInstance().reportNewGPSPosition(skPosition);
         // Code here for checking proximity and giving out news
 
         // If in proximity of two buildings then tell u r near two buildings and give out their names and any news of two
@@ -756,6 +832,7 @@ public class PhysicalTourActivity extends AppCompatActivity implements SKMapSurf
 //        System.out.println("Audio Advisor Settings set? "+SKRouteManager.getInstance().setAdvisorSettings(advisorSettings));
         skToolsNavigationManager.launchRouteCalculation(configuration, mapHolder);
      //   mapView.getMapSettings().setFollowPositions(true);
+        //skToolsNavigationManager.setNavigationListener();
         skToolsNavigationManager.startNavigation(configuration, mapHolder);
 
         SKToolsNavigationUIManager.getInstance().hideBottomAndLeftPanels();
@@ -935,7 +1012,10 @@ public class PhysicalTourActivity extends AppCompatActivity implements SKMapSurf
     @Override
     protected void onPause() {
         super.onPause();
-      // mapView.onPause();
+        try{
+        mapView.onPause();}catch(NullPointerException e){
+            System.out.println("mapView is null in onPause, Continutin");
+        }
         mapHolder.onPause();
         System.out.println("On pause called");
 
@@ -945,8 +1025,11 @@ public class PhysicalTourActivity extends AppCompatActivity implements SKMapSurf
     @Override
     protected void onResume() {
         super.onResume();
-       // mapView.onResume();
         mapHolder.onResume();
+        try{
+        mapView.onResume();}catch(NullPointerException e){
+            System.out.println("mapView is Null in onResume, Continuing");
+        }
         System.out.println("on resume called");
 
     }
@@ -1020,5 +1103,114 @@ public class PhysicalTourActivity extends AppCompatActivity implements SKMapSurf
     public void onMapPOISelected(SKMapPOI skMapPOI) {
 
     }
+
+    public void copiedNavigation(){
+
+
+            SKNavigationSettings navigationSettings = new SKNavigationSettings();
+            this.mapHolder = mapHolder;
+            mapView = mapHolder.getMapSurfaceView();
+                //   Toast.makeText(this.currentActivity, "The map will turn based on your recent positions.", Toast.LENGTH_SHORT).show();
+                mapView.getMapSettings().setFollowPositions(true);
+                mapView.getMapSettings().setHeadingMode(SKMapSettings.SKHeadingMode.ROTATING_MAP);
+                SKTrailSettings trailType = new SKTrailSettings();
+                trailType.setPedestrianTrailEnabled(true, 1);
+                mapView.getMapSettings().setTrailSettings(trailType);
+                navigationSettings.setCcpAsCurrentPosition(true);
+                mapView.getMapSettings().setCompassPosition(new SKScreenPoint(10, 70));
+                mapView.getMapSettings().setCompassShown(true);
+                navigationSettings.setNavigationMode(SKNavigationSettings.SKNavigationMode.PEDESTRIAN);
+
+
+
+            mapView.getMapSettings().setStreetNamePopupsShown(true);
+            mapView.getMapSettings().setMapZoomingEnabled(false);
+
+            mapHolder.setMapSurfaceListener(this);
+
+
+            navigationSettings.setNavigationType(SKNavigationSettings.SKNavigationType.REAL);
+            navigationSettings.setPositionerVerticalAlignment(-0.25f);
+            navigationSettings.setShowRealGPSPositions(false);
+            navigationManager.setNavigationListener(this);
+        navigationManager.setMapView(mapView);
+        navigationManager.startNavigation(navigationSettings);
+
+
+            // SKToolsNavigationUIManager.getInstance().inflateNavigationViews(currentActivity);
+            // SKToolsNavigationUIManager.getInstance().reset(configuration.getDistanceUnitType());
+            // SKToolsNavigationUIManager.getInstance().setFollowerMode();
+
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        //mapView.reportNewHeading(t.values[0]);
+        switch (event.sensor.getType()) {
+
+            case Sensor.TYPE_ORIENTATION:
+                if (orientationValues != null) {
+                    for (int i = 0; i < orientationValues.length; i++) {
+                        orientationValues[i] = event.values[i];
+
+                    }
+                    if (orientationValues[0] != 0) {
+                        if ((System.currentTimeMillis() - lastTimeWhenReceivedGpsSignal) > MINIMUM_TIME_UNTILL_MAP_CAN_BE_UPDATED) {
+                            applySmoothAlgorithm(orientationValues[0]);
+                            int currentExactScreenOrientation = Dialogue_Utilites.getExactScreenOrientation(this);
+                            if (lastExactScreenOrientation != currentExactScreenOrientation) {
+                                lastExactScreenOrientation = currentExactScreenOrientation;
+                                switch (lastExactScreenOrientation) {
+                                    case ActivityInfo.SCREEN_ORIENTATION_PORTRAIT:
+                                        mapView.reportNewDeviceOrientation(SKMapSurfaceView.SKOrientationType.PORTRAIT);
+                                        break;
+                                    case ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT:
+                                        mapView.reportNewDeviceOrientation(SKMapSurfaceView.SKOrientationType.PORTRAIT_UPSIDEDOWN);
+                                        break;
+                                    case ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE:
+                                        mapView.reportNewDeviceOrientation(SKMapSurfaceView.SKOrientationType.LANDSCAPE_RIGHT);
+                                        break;
+                                    case ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE:
+                                        mapView.reportNewDeviceOrientation(SKMapSurfaceView.SKOrientationType.LANDSCAPE_LEFT);
+                                        break;
+                                }
+                            }
+
+                            // report to NG the new value
+                            if (orientationValues[0] < 0) {
+                                mapView.reportNewHeading(-orientationValues[0]);
+                            } else {
+                                mapView.reportNewHeading(orientationValues[0]);
+                            }
+
+                            lastTimeWhenReceivedGpsSignal = System.currentTimeMillis();
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+
+    /**
+     * @param newCompassValue new z value returned by the sensors
+     */
+    private void applySmoothAlgorithm(float newCompassValue) {
+        if (Math.abs(newCompassValue - currentCompassValue) < 180) {
+            currentCompassValue = currentCompassValue + SMOOTH_FACTOR_COMPASS * (newCompassValue - currentCompassValue);
+        } else {
+            if (currentCompassValue > newCompassValue) {
+                currentCompassValue = (currentCompassValue + SMOOTH_FACTOR_COMPASS * ((360 + newCompassValue - currentCompassValue) % 360) + 360) % 360;
+            } else {
+                currentCompassValue = (currentCompassValue - SMOOTH_FACTOR_COMPASS * ((360 - newCompassValue + currentCompassValue) % 360) + 360) % 360;
+            }
+        }
+    }
+
 
 }

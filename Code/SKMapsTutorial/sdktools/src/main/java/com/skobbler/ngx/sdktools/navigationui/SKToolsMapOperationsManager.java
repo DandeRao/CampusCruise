@@ -20,7 +20,7 @@ import com.skobbler.ngx.sdktools.navigationui.autonight.SKToolsAutoNightManager;
  * Singleton class that provides various methods for changing the state of the
  * map.
  */
-class SKToolsMapOperationsManager {
+public class SKToolsMapOperationsManager {
 
     /**
      * default value to set full screen mode on different devices

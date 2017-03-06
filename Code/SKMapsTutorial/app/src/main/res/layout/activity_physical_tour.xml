@@ -76,7 +76,7 @@
             android:layout_toEndOf="@+id/QRScanButton"
             android:id="@+id/building_name"
             android:textSize="36sp"
-            android:textColor="@color/white"
+            android:textColor="#FFFFFF"
             android:layout_alignParentStart="true"
             android:textAlignment="center"
             tools:background="#458B00"
