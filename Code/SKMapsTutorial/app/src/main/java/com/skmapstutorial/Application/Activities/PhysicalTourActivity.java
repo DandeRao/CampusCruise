@@ -105,6 +105,9 @@ public class PhysicalTourActivity extends AppCompatActivity implements SensorEve
     static final float SMOOTH_FACTOR_COMPASS = 0.1f;
     boolean headingOn;
 
+    Button continueTourInDialogue;
+    Button qrScanButtonInDialogue;
+
 
     SKNavigationSettings navigationSettings = new SKNavigationSettings();
     SKNavigationManager navigationManager = SKNavigationManager.getInstance();
@@ -199,18 +202,21 @@ public class PhysicalTourActivity extends AppCompatActivity implements SensorEve
         QRScanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // QR Scan Handling
-                IntentIntegrator integrator = new IntentIntegrator(PhysicalTourActivity.this);
-                integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
-                integrator.setPrompt("Scan");
-                integrator.setCameraId(0);
-                integrator.setOrientationLocked(true);
-                integrator.setBarcodeImageEnabled(false);
-                integrator.initiateScan();
+              scanQR();
             }
         });
     }
 
+    public void scanQR(){
+        // QR Scan Handling
+        IntentIntegrator integrator = new IntentIntegrator(PhysicalTourActivity.this);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+        integrator.setPrompt("Scan");
+        integrator.setCameraId(0);
+        integrator.setOrientationLocked(true);
+        integrator.setBarcodeImageEnabled(false);
+        integrator.initiateScan();
+    }
     public void firstTimeRouteSettings() {
         currentPositionProvider.requestUpdateFromLastPosition();
         SKCoordinate navigationStartCoordinate;
@@ -727,6 +733,7 @@ public class PhysicalTourActivity extends AppCompatActivity implements SensorEve
     public void onDestinationReached() {
         setHeading(false);
         Toast.makeText(this, "Destination Reached", Toast.LENGTH_SHORT).show();
+        destinationReachedDialogue();
         Dialogue_Utilites.showBuildingDetialsDialouge(this);
         // Scan QR code Here
         skipBuilding.setText("Continue Tour");
@@ -737,7 +744,37 @@ public class PhysicalTourActivity extends AppCompatActivity implements SensorEve
 
     }
 
+public void destinationReachedDialogue(){
+    final Dialog dialog = new Dialog(PhysicalTourActivity.this);
+    dialog.setContentView(R.layout.destination_reached_dialogue_view);
+    dialog.setTitle("Destination Reached");
+    TextView title = (TextView) dialog.findViewById(R.id.destination_reached_building_name);
 
+    title.setText(university.getBuildings().get(buildingBeingVisited).getBuildingName());
+
+    dialog.show();
+
+    qrScanButtonInDialogue = (Button) dialog.findViewById(R.id.qr_scan_dialogue_button);
+    continueTourInDialogue = (Button) dialog.findViewById(R.id.continue_tour_dialogue_button);
+
+qrScanButtonInDialogue.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        scanQR();
+        qrScanButtonInDialogue.setVisibility(GONE);
+
+    }
+});
+
+    continueTourInDialogue.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            routeToNextBuilding();
+            dialog.dismiss();
+        }
+    });
+
+}
     @Override
     public void onSignalNewAdviceWithInstruction(String instruction) {
         //SKToolsAdvicePlayer.getInstance().playAdvice(audioFiles, SKToolsAdvicePlayer.PRIORITY_NAVIGATION);
@@ -801,9 +838,18 @@ public class PhysicalTourActivity extends AppCompatActivity implements SensorEve
 
     @Override
     public void onCurrentPositionUpdate(SKPosition skPosition) {
-        currentLocation = skPosition.getCoordinate();
-        System.out.println("Location Update Received"+currentLocation.toString());
-        SKPositionerManager.getInstance().reportNewGPSPosition(skPosition);
+
+            try {
+                if (currentLocation.equals(null))
+                    currentLocation = skPosition.getCoordinate();
+            }catch (NullPointerException e){
+                currentLocation = skPosition.getCoordinate();
+            }
+        if(calculateDistance(currentLocation, skPosition.getCoordinate() )>10  ) {
+            currentLocation = skPosition.getCoordinate();
+            SKPositionerManager.getInstance().reportNewGPSPosition(skPosition);
+            System.out.println("Location Update Received"+currentLocation.toString());
+        }
         // Code here for checking proximity and giving out news
 
         // If in proximity of two buildings then tell u r near two buildings and give out their names and any news of two

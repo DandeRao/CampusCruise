@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SKMapsTutorial</string>
+    <string name="app_name">Campus Cruise</string>
     <string-array name="universities">
         <item>NWMSU, Maryville</item>
     </string-array>
