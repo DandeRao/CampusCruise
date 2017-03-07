@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_virtual_tour"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="0dp"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp"
+    tools:context="com.skmapstutorial.Application.Activities.PhysicalTourActivity">
+
+    <com.skobbler.ngx.map.SKMapViewHolder
+        android:id="@+id/map_surface_holder"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+
+        <Button
+            android:id = "@+id/tourButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:text="Tour"
+            android:padding="10dp"
+            android:paddingRight="10dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="14dp"
+            android:layout_marginBottom="12dp" />
+
+        <Button
+            android:id = "@+id/QRScanButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|left"
+            android:text="Scan QR"
+            android:layout_alignParentBottom="true"
+            android:padding="10dp"
+            android:paddingLeft="10dp"
+            android:layout_marginBottom="14dp"
+            android:layout_marginStart="24dp" />
+        <Button
+            android:id = "@+id/startTourButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:text="Start Navigation"
+            android:padding="10dp"
+            android:paddingRight="10dp"
+            android:layout_marginBottom="14dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:visibility="invisible"
+            />
+
+        <Button
+            android:id = "@+id/skipBuildingButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:text="Skip this"
+            android:padding="10dp"
+            android:paddingRight="20dp"
+            android:layout_marginBottom="14dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:visibility="invisible"
+            />
+
+        <TextView
+            android:text="BuildingName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/QRScanButton"
+            android:id="@+id/building_name"
+            android:textSize="36sp"
+            android:textColor="#FFFFFF"
+            android:layout_alignParentStart="true"
+            android:textAlignment="center"
+            tools:background="#458B00"
+            android:visibility="invisible"
+            />
+
+    </com.skobbler.ngx.map.SKMapViewHolder>
+</FrameLayout>

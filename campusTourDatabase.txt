@@ -1,0 +1,32 @@
+create database campus_tour;
+ drop table user;
+--creating user table
+ create table user(
+ email varchar(255) not null primary key,
+ password varchar(255) not null,
+ role varchar(255) not null);
+ 
+--creating university table
+ create table university(
+ university_id int primary key,
+ university_name varchar(255) not null UNIQUE,
+ email varchar(255) not null UNIQUE,
+ password varchar(255) not null,
+ university_lattitude int not null,
+ university_longitude int not null,
+ FOREIGN KEY (email) REFERENCES user(email) 
+ on delete cascade);
+ 
+--creating building table
+ create table building(
+ building_id int primary key,
+ building_name varchar(255) not null,
+ building_description varchar(255) not null,
+ building_image varchar(255) not null,
+ building_video varchar(255) not null,
+ building_lattitude int not null,
+ building_longitude int not null,
+ university_id int not null,
+ FOREIGN KEY (university_id) REFERENCES university(university_id)
+ on delete cascade);
+ 
