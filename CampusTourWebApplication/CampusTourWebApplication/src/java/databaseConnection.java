@@ -42,7 +42,7 @@ public class databaseConnection {
         try{
                 
                 Class.forName("com.mysql.jdbc.Driver");
-                Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","");
+                Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","admin");
                 
                 Statement st = con.createStatement();
                 ResultSet rs = st.executeQuery("select * from university");
@@ -79,7 +79,7 @@ public class databaseConnection {
         Building b = new Building();
         try{
             Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","admin");
             Statement st = con.createStatement();
             String a = (String) session.getAttribute("editbuildingName");
             ResultSet rs = st.executeQuery("select * from building where building_name = '"+a+"'");
@@ -101,7 +101,7 @@ public class databaseConnection {
         
         try{
             Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","admin");
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery("select email from university where university_name = '"+session.getAttribute("deleteUnivName")+"'");
             rs.next();

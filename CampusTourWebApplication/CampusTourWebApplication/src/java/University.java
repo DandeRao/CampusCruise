@@ -90,7 +90,7 @@ public class University {
         try{
                 
                 Class.forName("com.mysql.jdbc.Driver");
-                Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","");
+                Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","admin");
                 
                 Statement st = con.createStatement();
                  st.executeUpdate("insert into user values('"+this.getUser()+"','"+this.getPassword()+"','user')");
@@ -111,7 +111,7 @@ public class University {
         try{
                 
                 Class.forName("com.mysql.jdbc.Driver");
-                Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","");
+                Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","admin");
                 
                 Statement st = con.createStatement();
                 ResultSet rs = st.executeQuery("select email from university where university='"+session.getAttribute("editUnivName")+"'");
@@ -141,7 +141,7 @@ public class University {
         University un = new University();
         try{
             Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","admin");
             Statement st = con.createStatement();
             String a = (String) session.getAttribute("editUnivName");
             ResultSet rs = st.executeQuery("select * from university where university_name = '"+a+"'");

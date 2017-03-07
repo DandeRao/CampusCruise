@@ -91,7 +91,7 @@ public class Building {
         try{
                 
                 Class.forName("com.mysql.jdbc.Driver");
-                Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","");
+                Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","admin");
                 
                 Statement st = con.createStatement();
                 ResultSet rs = st.executeQuery("select count(*) from building");
@@ -115,7 +115,7 @@ public class Building {
         try{
                 
                 Class.forName("com.mysql.jdbc.Driver");
-                Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","");
+                Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","admin");
                 
                 Statement st = con.createStatement();
                 ResultSet rs = st.executeQuery("select building_name from building where university_id=(select university_id from university where university_name = '"+session.getAttribute("university")+"')");

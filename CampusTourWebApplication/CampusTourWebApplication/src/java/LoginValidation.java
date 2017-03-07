@@ -70,7 +70,7 @@ public class LoginValidation {
         try{
                 
                 Class.forName("com.mysql.jdbc.Driver");
-                Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","");
+                Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","admin");
                 
                 Statement st = con.createStatement();
                 String a = this.email;
