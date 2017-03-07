@@ -120,7 +120,7 @@ public class databaseConnection {
             Statement st = con.createStatement();
             
             st.executeUpdate("delete from building where building_name = '"+buildingName+"'");
-            st.executeUpdate("delete from university where university_name='"+session.getAttribute("deleteUnivName")+"'");
+         
              
         }catch(Exception e){
             
