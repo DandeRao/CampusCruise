@@ -63,9 +63,12 @@
 
  		<h:column>
                     <f:facet name="header">
-    				
+    			
+          
                     </f:facet>
-    		
+    		<h:form>
+      <h:commandButton value="Delete" action ="#{databaseConnection.deleteBuildingDetails(b.buildingName)}" ></h:commandButton> 
+      </h:form>
     		</h:column>
 
     		<h:column>

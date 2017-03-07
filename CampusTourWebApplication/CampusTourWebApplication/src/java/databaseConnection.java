@@ -114,7 +114,21 @@ public class databaseConnection {
         return "delete";
     }
     
-   
+   public String deleteBuildingDetails(String buildingName){
+        
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","");
+            Statement st = con.createStatement();
+            
+            st.executeUpdate("delete from building where building_name = '"+buildingName+"'");
+           // st.executeUpdate("delete from university where university_name='"+session.getAttribute("deleteUnivName")+"'");
+             
+        }catch(Exception e){
+            
+        }
+        return "delete";
+    }
     
     
     
