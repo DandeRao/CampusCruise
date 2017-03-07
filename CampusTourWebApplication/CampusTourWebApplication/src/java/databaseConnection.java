@@ -70,10 +70,7 @@ public class databaseConnection {
         System.out.println(buildingName);
         return "edit";
     }
-    public String deleteUniversityDetails(String universityName){
-        session.setAttribute("deleteUnivName",universityName);
-        return "delete";
-    }
+   
     
     public Building editBuildingDetails(){
         Building b = new Building();
@@ -97,16 +94,17 @@ public class databaseConnection {
       //  session.removeAttribute("editUnivName");
         return b;
     }
-    public String deleteUniversityDetails(){
+    public String deleteUniversityDetails(String universityName){
         
         try{
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","");
             Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("select email from university where university_name = '"+session.getAttribute("deleteUnivName")+"'");
+            ResultSet rs = st.executeQuery("select email from university where university_name = '"+universityName+"'");
             rs.next();
             String a = rs.getString("email");
-            st.executeUpdate("delete  from user where email = '"+a+"'");
+            st.executeUpdate("delete from user where email = '"+a+"'");
+           // st.executeUpdate("delete from university where university_name='"+session.getAttribute("deleteUnivName")+"'");
              
         }catch(Exception e){
             
@@ -114,7 +112,21 @@ public class databaseConnection {
         return "delete";
     }
     
-   
+   public String deleteBuildingDetails(String buildingName){
+        
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","");
+            Statement st = con.createStatement();
+            
+            st.executeUpdate("delete from building where building_name = '"+buildingName+"'");
+           // st.executeUpdate("delete from university where university_name='"+session.getAttribute("deleteUnivName")+"'");
+             
+        }catch(Exception e){
+            
+        }
+        return "delete";
+    }
     
     
     
