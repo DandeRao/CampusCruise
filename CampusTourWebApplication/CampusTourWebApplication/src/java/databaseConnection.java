@@ -43,6 +43,7 @@ public class databaseConnection {
                 
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","admin");
+                Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","");
                 
                 Statement st = con.createStatement();
                 ResultSet rs = st.executeQuery("select * from university");
@@ -74,12 +75,14 @@ public class databaseConnection {
         session.setAttribute("deleteUnivName",universityName);
         return "delete";
     }
+   
     
     public Building editBuildingDetails(){
         Building b = new Building();
         try{
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","admin");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","");
             Statement st = con.createStatement();
             String a = (String) session.getAttribute("editbuildingName");
             ResultSet rs = st.executeQuery("select * from building where building_name = '"+a+"'");
@@ -98,15 +101,17 @@ public class databaseConnection {
         return b;
     }
     public String deleteUniversityDetails(){
+    public String deleteUniversityDetails(String universityName){
         
         try{
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","admin");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","");
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery("select email from university where university_name = '"+session.getAttribute("deleteUnivName")+"'");
+            ResultSet rs = st.executeQuery("select email from university where university_name = '"+universityName+"'");
             rs.next();
             String a = rs.getString("email");
-            st.executeUpdate("delete  from user where email = '"+a+"'");
              
         }catch(Exception e){
             
