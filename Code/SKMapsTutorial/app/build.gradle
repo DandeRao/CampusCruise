@@ -31,22 +31,28 @@ dependencies {
     compile 'com.journeyapps:zxing-android-embedded:3.2.0@aar'
     compile files('libs/SKMaps.jar')
     compile files('libs/SKMaps-docs.jar')
+    compile 'com.google.code.gson:gson:2.4'
+    compile 'com.google.guava:guava:18.0'
+    compile 'joda-time:joda-time:2.4'
+    compile 'com.android.support:support-v4:25.1.0'
+    compile "com.android.support:appcompat-v7:25.1.0"
+    compile 'com.android.support:recyclerview-v7:25.1.0'
 }
 
-
 repositories {
+
     maven {
         url "http://developer.skobbler.com/maven/"
     }
 }
 
+
 configurations {
     skobblersdk
 }
 dependencies {
-    skobblersdk "com.skobbler.ngx:SKMaps:3.0.2"
+    skobblersdk "com.skobbler.ngx:SKMaps:3.0.3"
     compile files('libs/SKMaps.jar')
-    compile project(path: ':sdktools')
 }
 
 def assetsPath = "$projectDir/src/main/assets"
@@ -54,6 +60,45 @@ def libsPath = "$projectDir/libs"
 def jniLibsPath = "$projectDir/src/main/jniLibs"
 
 task installSKMaps << {
+    copy {
+        from configurations.skobblersdk
+        into "$buildDir/skobblersdk-down"
+        rename { String fileName -> 'skobblersdkres.zip' }
+    }
+    copy {
+        from zipTree("$buildDir/skobblersdk-down/skobblersdkres.zip")
+        into "$buildDir/skobblersdk-down"
+    }
+    delete("$jniLibsPath",
+            "$assetsPath/SKMaps.zip",
+            "$libsPath/SKMaps.jar")
+    copy {
+        from "${buildDir}/skobblersdk-down/jniLibs"
+        into "$jniLibsPath"
+    }
+    copy {
+        from "${buildDir}/skobblersdk-down/"
+        into "$assetsPath"
+    }
+    copy {
+        from "${buildDir}/skobblersdk-down/SKMaps.jar"
+        into "$libsPath"
+    }
+    delete("$buildDir/skobblersdk-down")
+    delete(configurations.skobblersdk)
+}
+
+
+configurations {
+    skobblersdk
+}
+dependencies {
+    skobblersdk "com.skobbler.ngx:SKMaps:3.0.3"
+    compile files('libs/SKMaps.jar')
+    compile project(path: ':sdktools')
+}
+
+task installSKToolsMaps << {
     copy {
         from configurations.skobblersdk
         into "$buildDir/skobblersdk-down"

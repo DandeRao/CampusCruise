@@ -49,7 +49,7 @@ import com.skobbler.ngx.routing.SKRouteSettings;
 /**
  * This class handles the user interface related to the navigation experience.
  */
-class SKToolsNavigationUIManager {
+public class SKToolsNavigationUIManager {
 
     /**
      * Singleton instance for current class
@@ -673,6 +673,8 @@ class SKToolsNavigationUIManager {
                 viaPointText.setText("");
 
                 inflateBottomPanels();
+
+
             }
         });
     }

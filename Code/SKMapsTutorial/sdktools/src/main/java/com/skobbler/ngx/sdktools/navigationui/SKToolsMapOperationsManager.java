@@ -20,7 +20,7 @@ import com.skobbler.ngx.sdktools.navigationui.autonight.SKToolsAutoNightManager;
  * Singleton class that provides various methods for changing the state of the
  * map.
  */
-class SKToolsMapOperationsManager {
+public class SKToolsMapOperationsManager {
 
     /**
      * default value to set full screen mode on different devices
@@ -183,8 +183,8 @@ class SKToolsMapOperationsManager {
         mapSettings.setMapRotationEnabled(true);
         mapView.getMapSettings().setCompassShown(true);
         mapView.getMapSettings().setFollowPositions(false);
-        mapView.getMapSettings().setHeadingMode(SKMapSettings.SKHeadingMode.ROUTE);
-        mapView.getMapSettings().setMapDisplayMode(SKMapSettings.SKMapDisplayMode.MODE_2D);
+        mapView.getMapSettings().setHeadingMode(SKMapSettings.SKHeadingMode.ROTATING_MAP);
+        mapView.getMapSettings().setMapDisplayMode(SKMapSettings.SKMapDisplayMode.MODE_3D);
     }
 
 
@@ -194,7 +194,7 @@ class SKToolsMapOperationsManager {
     public void setMapInNavigationMode() {
         mapView.setZoom(zoomBeforeSwitch);
         mapView.getMapSettings().setMapZoomingEnabled(false);
-        mapView.getMapSettings().setHeadingMode(SKMapSettings.SKHeadingMode.ROUTE);
+        mapView.getMapSettings().setHeadingMode(SKMapSettings.SKHeadingMode.ROTATING_MAP);
         mapView.getMapSettings().setFollowPositions(true);
 
 
