@@ -83,8 +83,8 @@ public class databaseConnection {
             rs.next();
             b.setBuildingName(rs.getString("building_name"));
             b.setBuildingDescription(rs.getString("building_description"));
-            b.setBuildingImage(rs.getString("building_image"));
-            b.setBuildingVideo(rs.getString("building_video"));
+     //       b.setBuildingImage(rs.getString("building_image"));
+     //       b.setBuildingVideo(rs.getString("building_video"));
             b.setBuildingLattitude(rs.getInt("building_lattitude"));
             b.setBuildingLongitude(rs.getInt("building_longitude"));
             con.close();
@@ -128,6 +128,7 @@ public class databaseConnection {
         return "delete";
     }
     
+   
     
     
 }

@@ -16,15 +16,15 @@ and open the template in the editor.
     <body>
         <div id="container">
             <h:outputText value="#{loginValidation.outputMessage}"></h:outputText>
-            <h:form>
+            <h:form enctype="multipart/form-data">
             <h1><span id="heading">Add Building</span></h1>
             <h:inputText a:placeholder="Building Name" styleClass="txfld"  value="#{building.buildingName}" ></h:inputText>
             <br></br>
             <h:inputText a:placeholder="Building Description" styleClass="txfld"  value="#{building.buildingDescription}" ></h:inputText>
             <br></br>
-            <h:inputText a:placeholder="Building Image" styleClass="txfld"  value="#{building.buildingImage}" ></h:inputText>
+            <h:inputFile a:placeholder="Building Image" styleClass="txfld"  value="#{building.buildingImage}" ></h:inputFile>
             <br></br>
-            <h:inputText a:placeholder="Building Video" styleClass="txfld"  value="#{building.buildingVideo}" ></h:inputText>
+            <h:inputFile a:placeholder="Building Video" styleClass="txfld"  value="#{building.buildingVideo}" ></h:inputFile>
             <br></br>
             <h:inputText a:placeholder="Lattitude" styleClass="txfld"  value="#{building.buildingLattitude}" ></h:inputText>
             <br></br>
