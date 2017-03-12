@@ -4,6 +4,10 @@
  * and open the template in the editor.
  */
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -18,6 +22,8 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 /**
  *
@@ -29,10 +35,26 @@ public class Building {
     List<Building> buildingsList = new ArrayList<Building>() {};
     HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         HttpSession session = request.getSession();
-    private String buildingImage;
-    private String buildingVideo;
+    private Part buildingImage;
+    private Part buildingVideo;
     private int buildingLattitude;
     private int buildingLongitude;
+
+    public Part getBuildingImage() {
+        return buildingImage;
+    }
+
+    public void setBuildingImage(Part buildingImage) {
+        this.buildingImage = buildingImage;
+    }
+
+    public Part getBuildingVideo() {
+        return buildingVideo;
+    }
+
+    public void setBuildingVideo(Part buildingVideo) {
+        this.buildingVideo = buildingVideo;
+    }
     private String buildingName;
     
     private String buildingDescription;
@@ -53,21 +75,6 @@ public class Building {
         this.buildingDescription = buildingDescription;
     }
 
-    public String getBuildingImage() {
-        return buildingImage;
-    }
-
-    public void setBuildingImage(String buildingImage) {
-        this.buildingImage = buildingImage;
-    }
-
-    public String getBuildingVideo() {
-        return buildingVideo;
-    }
-
-    public void setBuildingVideo(String buildingVideo) {
-        this.buildingVideo = buildingVideo;
-    }
 
     public int getBuildingLattitude() {
         return buildingLattitude;
@@ -88,19 +95,38 @@ public class Building {
         
     }
     public String addBuilding(){
+        String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("resources/images");
+       // HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        path=path.substring(0,path.indexOf("\\build"));
+        path=path+"\\web\\resources\\images\\";
+        
         try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","");
+            Statement st = con.createStatement();
+                InputStream fp = buildingImage.getInputStream();
+                byte[] data = new byte[fp.available()];
+                fp.read(data);
+                FileOutputStream fout = new FileOutputStream(new File(path+this.buildingName+" Image.jpg"));
+                fout.write(data);
+                fp = buildingVideo.getInputStream();
+                data = new byte[fp.available()];
+                fp.read(data);
+                fout = new FileOutputStream(new File(path+this.buildingName+" Video.mp4"));
+                fout.write(data);
+                fp.close();
+                fout.close();
                 
-                Class.forName("com.mysql.jdbc.Driver");
-                Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","admin");
                 
-                Statement st = con.createStatement();
+                
+                
                 ResultSet rs = st.executeQuery("select count(*) from building");
                 rs.next();
                 int count = rs.getInt(1);
                ResultSet result = st.executeQuery("select university_id from university where university_name = '"+session.getAttribute("university")+"'");
                result.next();
                int id = result.getInt("university_id");
-                st.executeUpdate("insert into building values('"+(count+1)+"','"+this.getBuildingName()+"','"+this.buildingDescription+"','"+this.buildingImage+"','"+this.getBuildingVideo()+"','"+this.getBuildingLattitude()+"','"+this.getBuildingLongitude()+"','"+id+"')");
+                st.executeUpdate("insert into building values('"+(count+1)+"','"+this.getBuildingName()+"','"+this.buildingDescription+"','"+path+this.buildingName+" Image.jpg".replace("/", "|")+"','"+path+this.buildingName+" Video.mp4".replace("/", "//")+"','"+this.getBuildingLattitude()+"','"+this.getBuildingLongitude()+"','"+id+"')");
                 
         }
         catch(Exception e){
@@ -115,7 +141,7 @@ public class Building {
         try{
                 
                 Class.forName("com.mysql.jdbc.Driver");
-                Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","admin");
+                Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","");
                 
                 Statement st = con.createStatement();
                 ResultSet rs = st.executeQuery("select building_name from building where university_id=(select university_id from university where university_name = '"+session.getAttribute("university")+"')");

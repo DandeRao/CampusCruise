@@ -26,7 +26,7 @@ import javax.servlet.http.HttpSession;
 public class University {
     HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         HttpSession session = request.getSession();
-        University universityToEdit = new University();
+        
     /**
      * Creates a new instance of University
      */
@@ -39,13 +39,9 @@ public class University {
         return password;
     }
 
-    public University getUniversityToEdit() {
-        return universityToEdit;
-    }
+   
 
-    public void setUniversityToEdit(University universityToEdit) {
-        this.universityToEdit = universityToEdit;
-    }
+
 
     public void setPassword(String password) {
         this.password = password;
@@ -90,7 +86,7 @@ public class University {
         try{
                 
                 Class.forName("com.mysql.jdbc.Driver");
-                Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","admin");
+                Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","");
                 
                 Statement st = con.createStatement();
                  st.executeUpdate("insert into user values('"+this.getUser()+"','"+this.getPassword()+"','user')");
@@ -111,7 +107,7 @@ public class University {
         try{
                 
                 Class.forName("com.mysql.jdbc.Driver");
-                Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","admin");
+                Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","");
                 
                 Statement st = con.createStatement();
                 ResultSet rs = st.executeQuery("select email from university where university='"+session.getAttribute("editUnivName")+"'");
@@ -141,7 +137,7 @@ public class University {
         University un = new University();
         try{
             Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","admin");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour","root","");
             Statement st = con.createStatement();
             String a = (String) session.getAttribute("editUnivName");
             ResultSet rs = st.executeQuery("select * from university where university_name = '"+a+"'");
@@ -155,7 +151,7 @@ public class University {
         }catch(Exception e){
             
         }
-        universityToEdit = un;
+        
       //  session.removeAttribute("editUnivName");
         return un;
     }
