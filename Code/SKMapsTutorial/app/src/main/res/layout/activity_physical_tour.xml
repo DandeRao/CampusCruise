@@ -17,19 +17,17 @@
 
 
         <Button
-            android:text="Tour"
             android:id = "@+id/tourButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
+            android:text="Tour"
             android:padding="10dp"
             android:paddingRight="10dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="14dp"
-            android:layout_marginBottom="12dp"
-            android:background="@android:color/holo_green_dark"
-            android:textColor="@color/white" />
+            android:layout_marginBottom="12dp" />
 
         <Button
             android:id = "@+id/QRScanButton"
@@ -41,9 +39,7 @@
             android:padding="10dp"
             android:paddingLeft="10dp"
             android:layout_marginBottom="14dp"
-            android:layout_marginStart="24dp"
-            android:background="@android:color/holo_green_dark"
-            android:textColor="@color/white" />
+            android:layout_marginStart="24dp" />
         <Button
             android:id = "@+id/startTourButton"
             android:layout_width="wrap_content"
@@ -56,23 +52,19 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:visibility="invisible"
-            android:background="@android:color/holo_green_dark"
-            android:textColor="@color/white" />
+            />
 
         <Button
-            android:text="Skip this"
             android:id = "@+id/skipBuildingButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
+            android:text="Skip this"
             android:padding="10dp"
-            android:paddingRight="10dp"
+            android:paddingRight="20dp"
+            android:layout_marginBottom="14dp"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="14dp"
-            android:layout_marginBottom="12dp"
-            android:background="@android:color/holo_green_dark"
-            android:textColor="@color/white"
+            android:layout_alignParentRight="true"
             android:visibility="invisible"
             />
 
@@ -84,10 +76,10 @@
             android:layout_toEndOf="@+id/QRScanButton"
             android:id="@+id/building_name"
             android:textSize="36sp"
-            android:textColor="@color/white"
+            android:textColor="#FFFFFF"
             android:layout_alignParentStart="true"
             android:textAlignment="center"
-            tools:background="@android:color/holo_green_dark"
+            tools:background="#458B00"
             android:visibility="invisible"
             />
 
