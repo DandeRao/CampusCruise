@@ -7,7 +7,8 @@ and open the template in the editor.
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" 
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:f="http://java.sun.com/jsf/core">
     <head>
         <title>Add University</title>
         <link rel="stylesheet" type="text/css" href="style.css"></link>
@@ -22,9 +23,11 @@ and open the template in the editor.
             <br></br>
             <h:inputText a:placeholder="Building Description" styleClass="txfld"  value="#{building.buildingDescription}" ></h:inputText>
             <br></br>
-            <h:inputFile a:placeholder="Building Image" styleClass="txfld"  value="#{building.buildingImage}" ></h:inputFile>
+            <h:inputFile a:placeholder="Building Image" value="#{building.buildingImage}" ><f:validator validatorId="fileUploadValidator"/></h:inputFile>
             <br></br>
-            <h:inputFile a:placeholder="Building Video" styleClass="txfld"  value="#{building.buildingVideo}" ></h:inputFile>
+            <h:inputFile a:placeholder="Building Audio" styleClass="txfld"  value="#{building.buildingAudio}" ><f:validator validatorId="fileUploadValidator"/></h:inputFile>
+            <br></br>
+            <h:inputFile a:placeholder="Building Video" styleClass="txfld"  value="#{building.buildingVideo}" ><f:validator validatorId="fileUploadValidator"/></h:inputFile>
             <br></br>
             <h:inputText a:placeholder="Lattitude" styleClass="txfld"  value="#{building.buildingLattitude}" ></h:inputText>
             <br></br>

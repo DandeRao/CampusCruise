@@ -23,6 +23,7 @@ create database campus_tour;
  building_name varchar(255) not null,
  building_description varchar(255) not null,
  building_image varchar(255) not null,
+ building_audio varchar(255) not null,
  building_video varchar(255) not null,
  building_lattitude int not null,
  building_longitude int not null,

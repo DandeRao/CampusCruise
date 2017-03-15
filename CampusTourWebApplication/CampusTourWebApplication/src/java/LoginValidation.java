@@ -18,55 +18,97 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author premsagarkondaparthy
+ * @author Rakesh Chitturi
  */
 @Named(value = "loginValidation")
 @ManagedBean
 public class LoginValidation {
-    FacesContext facesContext = FacesContext.getCurrentInstance();
-    HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(true);
+    //created seesion
+    HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
     /**
      * Creates a new instance of LoginValidation
      */
     public LoginValidation() {
     }
-    
+    //Email of the user
     private String email;
+    //password of the user
     private String password;
+    //Error message to show
     private String outputMessage;
+    //university name allocated to user
     private  String universityName;
+
+    /**
+     *Method that gets the universityName
+     * @return universityName
+     */
     public  String getUniversityName() {
         return universityName;
     }
 
+    /**
+     *Method that sets the universityName
+     * @param universityName name of the university
+     */
     public  void setUniversityName(String universityName) {
         this.universityName = universityName;
     }
+
+    /**
+     *Method that gets the outputMessage
+     * @return
+     */
     public String getOutputMessage() {
         return outputMessage;
     }
 
+    /**
+     *Method that sets the universityName
+     * @param outputMessage error message to the user
+     */
     public void setOutputMessage(String outputMessage) {
         this.outputMessage = outputMessage;
     }
 
+    /**
+     *Method that gets the email
+     * @return email;
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     *Method that sets the email
+     * @param email email of the user
+     */
     public void setEmail(String email) {
         this.email = email;
     }
 
+    /**
+     *Method that gets the password
+     * @return password
+     */
     public String getPassword() {
         return password;
     }
 
+    /**
+     *Method that sets the password
+     * @param password password of the user
+     */
     public void setPassword(String password) {
         this.password = password;
     }
+
+    /**
+     *Method that validates username and password
+     * @return string
+     */
     public String validatingUsernamePassword(){
-        outputMessage="wtf";
+        
         try{
                 
                 Class.forName("com.mysql.jdbc.Driver");
@@ -111,6 +153,11 @@ public class LoginValidation {
             return "";
             
     }
+
+    /**
+     *Method to logout
+     * @return string
+     */
     public String logout(){
         session.invalidate();
         return "loggedOut";
