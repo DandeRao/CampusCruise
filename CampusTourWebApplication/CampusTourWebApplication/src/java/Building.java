@@ -5,25 +5,22 @@
  */
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Named;
-import javax.enterprise.context.Dependent;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 /**
  *
@@ -176,7 +173,7 @@ public class Building {
     /**
      * Method that sets the building longitude
      *
-     * @param buildingLongitude longitude of the building
+     * @param  buildingLongitude longitude of the building
      */
     public void setBuildingLongitude(int buildingLongitude) {
         this.buildingLongitude = buildingLongitude;
@@ -239,7 +236,7 @@ public class Building {
             fout.write(data);
             fp.close();
             fout.close();
-        } catch (Exception e) {
+        } catch (ClassNotFoundException | SQLException | IOException e) {
 
         }
         return "inserted";
@@ -255,19 +252,18 @@ public class Building {
         try {
 
             Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour", "root", "");
-
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("select building_name from building where university_id=(select university_id from university where university_name = '" + session.getAttribute("university") + "')");
-            while (rs.next()) {
-                Building build = new Building();
-                build.setBuildingName(rs.getString("building_name"));
-
-                buildingsList.add(build);
-
+            try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour", "root", "")) {
+                Statement st = con.createStatement();
+                ResultSet rs = st.executeQuery("select building_name from building where university_id=(select university_id from university where university_name = '" + session.getAttribute("university") + "')");
+                while (rs.next()) {
+                    Building build = new Building();
+                    build.setBuildingName(rs.getString("building_name"));
+                    
+                    buildingsList.add(build);
+                    
+                }
             }
-            con.close();
-        } catch (Exception e) {
+        } catch (ClassNotFoundException | SQLException e) {
 
         }
         return buildingsList;
