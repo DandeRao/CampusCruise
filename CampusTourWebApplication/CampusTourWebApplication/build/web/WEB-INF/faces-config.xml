@@ -17,10 +17,40 @@
             <to-view-id>userHome.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
+            
+            <from-action>#{loginValidation.logout()}</from-action>
+            <from-outcome>loggedOut</from-outcome>
+            <to-view-id>login.xhtml</to-view-id>
+            
+        </navigation-case>
+        <navigation-case>
             <from-view-id>AddUniversity.xhtml</from-view-id>
             <from-action>#{university.addUniversity()}</from-action>
             <from-outcome>inserted</from-outcome>
             <to-view-id>adminHome.xhtml</to-view-id>
+        </navigation-case>
+        
+        
+        <navigation-case>
+            <from-view-id>adminHome.xhtml</from-view-id>
+            <from-action>#{university.getUniversityDetails(c)}</from-action>
+            <from-outcome>edit</from-outcome>
+            <to-view-id>EditUniversity.xhtml</to-view-id>
+            
+        </navigation-case>
+         <navigation-case>
+            <from-view-id>EditUniversity.xhtml</from-view-id>
+            <from-action>#{university.updateUniversity()}</from-action>
+            <from-outcome>updated</from-outcome>
+            <to-view-id>successEdit.xhtml</to-view-id>
+            
+        </navigation-case>
+         <navigation-case>
+            <from-view-id>EditBuilding.xhtml</from-view-id>
+            <from-action>#{building.updateBuilding()}</from-action>
+            <from-outcome>updated</from-outcome>
+            <to-view-id>successEdit.xhtml</to-view-id>
+            
         </navigation-case>
         <navigation-case>
             <from-view-id>AddBuilding.xhtml</from-view-id>
@@ -30,47 +60,26 @@
             
         </navigation-case>
         <navigation-case>
-            
-            <from-action>#{loginValidation.logout()}</from-action>
-            <from-outcome>loggedOut</from-outcome>
-            <to-view-id>login.xhtml</to-view-id>
-            
-        </navigation-case>
-        <navigation-case>
-            <from-view-id>adminHome.xhtml</from-view-id>
-            <from-action>#{university.getUniversityDetails(c.univName)}</from-action>
-            <from-outcome>edit</from-outcome>
-            <to-view-id>EditUniversity.xhtml</to-view-id>
-            
-        </navigation-case>
-         <navigation-case>
-            <from-view-id>EditUniversity.xhtml</from-view-id>
-            <from-action>#{University.updateUniversity()}</from-action>
-            <from-outcome>updated</from-outcome>
-            <to-view-id>successPage.xhtml</to-view-id>
-            
-        </navigation-case>
-        <navigation-case>
             <from-view-id>userHome.xhtml</from-view-id>
-            <from-action>#{databaseConnection.getBuildingDetails(b.buildingName)}</from-action>
+            <from-action>#{building.getBuildingDetails(b)}</from-action>
             <from-outcome>edit</from-outcome>
             <to-view-id>EditBuilding.xhtml</to-view-id>
             
         </navigation-case>
         <navigation-case>
             <from-view-id>adminHome.xhtml</from-view-id>
-            <from-action>#{databaseConnection.deleteUniversityDetails(c.univName)}</from-action>
+            <from-action>#{building.deleteUniversityDetails(c.univName)}</from-action>
             <from-outcome>delete</from-outcome>
             <to-view-id>successPage.xhtml</to-view-id>
             
         </navigation-case>
         <navigation-case>
             <from-view-id>userHome.xhtml</from-view-id>
-            <from-action>#{databaseConnection.deleteBuildingDetails(b.buildingName)}</from-action>
+            <from-action>#{building.deleteBuildingDetails(b.buildingName)}</from-action>
             <from-outcome>delete</from-outcome>
             <to-view-id>successPage.xhtml</to-view-id>
             
         </navigation-case>
     </navigation-rule>
-  
+
 </faces-config>

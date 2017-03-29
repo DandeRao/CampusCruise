@@ -13,8 +13,33 @@ and open the template in the editor.
         <title>Add University</title>
         <link rel="stylesheet" type="text/css" href="style.css"></link>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </head>
     <body>
+      <nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <span class="navbar-brand">Campus Tour</span>
+    </div>
+
+    <ul class="nav navbar-nav">
+    
+            
+       <li><a href="/CampusTourWebApplication/faces/userHome.xhtml"  >Buildings</a></li>
+
+      </ul>
+      
+       <ul class="nav navbar-nav navbar-right">
+           <h:form>
+           <li><h:commandLink value="Logout" action ="#{loginValidation.logout()}" ></h:commandLink></li>
+           </h:form>
+      
+      
+    </ul>
+  </div>
+</nav>
         <div id="container">
             <h:outputText value="#{loginValidation.outputMessage}"></h:outputText>
             <h:form enctype="multipart/form-data">
@@ -23,15 +48,15 @@ and open the template in the editor.
             <br></br>
             <h:inputText a:placeholder="Building Description" styleClass="txfld"  value="#{building.buildingDescription}" ></h:inputText>
             <br></br>
-            <h:inputFile a:placeholder="Building Image" value="#{building.buildingImage}" ><f:validator validatorId="fileUploadValidator"/></h:inputFile>
+            <h:inputFile a:placeholder="Building Image" styleClass="txfld" value="#{building.buildingImage}" ><f:validator validatorId="fileUploadValidator"/></h:inputFile>
             <br></br>
             <h:inputFile a:placeholder="Building Audio" styleClass="txfld"  value="#{building.buildingAudio}" ><f:validator validatorId="fileUploadValidator"/></h:inputFile>
             <br></br>
             <h:inputFile a:placeholder="Building Video" styleClass="txfld"  value="#{building.buildingVideo}" ><f:validator validatorId="fileUploadValidator"/></h:inputFile>
             <br></br>
-            <h:inputText a:placeholder="Lattitude" styleClass="txfld"  value="#{building.buildingLattitude}" ></h:inputText>
+            <h:inputText a:placeholder="Lattitude" styleClass="txfld"  value="#{building.buildingLattitude}" ><f:validateRegex pattern="^[0-9]+$"/></h:inputText>
             <br></br>
-            <h:inputText a:placeholder="Longitude" styleClass="txfld"  value="#{building.buildingLongitude}" ></h:inputText>
+            <h:inputText a:placeholder="Longitude" styleClass="txfld"  value="#{building.buildingLongitude}" ><f:validateRegex pattern="^[0-9]+$"/></h:inputText>
             <br></br>
             
             <h:commandButton value="Add Building!" action ="#{building.addBuilding()}" styleClass="lgnBTN"></h:commandButton>
