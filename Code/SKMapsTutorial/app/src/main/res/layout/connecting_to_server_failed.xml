@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:text="Campus Cruise App"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/current_location_not_available_heading"
+        android:textSize="20sp"
+        android:fontFamily="serif"
+        android:typeface="sans"
+        android:textColor="@android:color/white"
+        android:textAlignment="center"
+        android:background="@android:color/holo_green_dark" />
+
+    <TextView
+        android:text="Connecting to Server Failed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/connecting_to_server_failed_heading"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:paddingTop="10dp" />
+
+    <TextView
+        android:text="Oops.. Connection attempt to server failed.\n\n Please try after some time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/connecting_to_server_failed_message"
+        android:paddingTop="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:padding="15dp"
+        android:textColor="@android:color/black"
+        android:textAlignment="center" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:text="Close and try later"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/connecting_to_server_failed_button"
+            android:layout_weight="1"
+            android:background="@android:color/holo_green_dark"
+            android:textColor="@android:color/white"
+            android:layout_margin="10dp" />
+
+    </LinearLayout>
+</LinearLayout>
