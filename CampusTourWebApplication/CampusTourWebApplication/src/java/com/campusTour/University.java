@@ -31,13 +31,7 @@ public class University {
     List<University> universityList = new ArrayList<>();
     private  University tempUniversity;
 
-    public University getTempUniversity() {
-        return tempUniversity;
-    }
 
-    public void setTempUniversity(University tempUniversity) {
-        this.tempUniversity = tempUniversity;
-    }
     
     /**
      * Creates a new instance of University
@@ -93,33 +87,7 @@ public class University {
         this.user = user;
     }
 
-    /**
-     * Method that gets the university latitude
-     *
-     * @return universityLattitude
-     */
-   
-
-    /**
-     * Method that sets the university latitude
-     *
-     * @param universityLattitude latitude of the university
-     */
     
-
-    /**
-     * Method that gets the university longitude
-     *
-     * @return universityLongitude
-     */
-    
-
-    /**
-     * Method that sets the university longitude
-     *
-     * @param universityLongitude longitude of the university
-     */
-   
 
     /**
      * Method that sets the university name
@@ -235,18 +203,34 @@ public class University {
         return "edit";
     }
 
+    /**
+     *Gets the latitude of university
+     * @return double value which is latitude
+     */
     public double getUniversityLattitude() {
         return universityLattitude;
     }
 
+    /**
+     *sets the latitude of university
+     * @param universityLattitude is set
+     */
     public void setUniversityLattitude(double universityLattitude) {
         this.universityLattitude = universityLattitude;
     }
 
+    /**
+     *gets the university longitude
+     * @return longitude of university
+     */
     public double getUniversityLongitude() {
         return universityLongitude;
     }
 
+    /**
+     *sets the longitude of university
+     * @param universityLongitude which is double value
+     */
     public void setUniversityLongitude(double universityLongitude) {
         this.universityLongitude = universityLongitude;
     }
@@ -282,6 +266,11 @@ public class University {
         }
         return "delete";
     }
+
+    /**
+     *Returns the list of university
+     * @returnblist of university
+     */
     public List<University> universityList() {
         universityList.clear();
         try {
@@ -308,6 +297,11 @@ public class University {
         return universityList;
     }
     
+    /**
+     *Delete the file
+     * @param file
+     * @return  boolean whether file is deleted or not
+     */
     public boolean deleteDir(File file) {
     File[] contents = file.listFiles();
     if (contents != null) {
