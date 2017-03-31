@@ -54,9 +54,9 @@ and open the template in the editor.
             <br></br>
             <h:inputFile a:placeholder="Building Video" styleClass="txfld"  value="#{building.buildingVideo}" ><f:validator validatorId="fileUploadValidator"/></h:inputFile>
             <br></br>
-            <h:inputText a:placeholder="Lattitude" styleClass="txfld"  value="#{building.buildingLattitude}" ><f:validateRegex pattern="^[0-9]+$"/></h:inputText>
+            <h:inputText a:placeholder="Lattitude" styleClass="txfld"  value="#{building.buildingLattitude}" ></h:inputText>
             <br></br>
-            <h:inputText a:placeholder="Longitude" styleClass="txfld"  value="#{building.buildingLongitude}" ><f:validateRegex pattern="^[0-9]+$"/></h:inputText>
+            <h:inputText a:placeholder="Longitude" styleClass="txfld"  value="#{building.buildingLongitude}" ></h:inputText>
             <br></br>
             
             <h:commandButton value="Add Building!" action ="#{building.addBuilding()}" styleClass="lgnBTN"></h:commandButton>

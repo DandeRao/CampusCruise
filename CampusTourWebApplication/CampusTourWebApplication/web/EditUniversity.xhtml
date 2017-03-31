@@ -51,11 +51,11 @@ and open the template in the editor.
             <br></br>
             <h:message for="universityLatitude" styleClass="txfld" style="color:red" />
             University Latitude*:
-            <h:inputText a:placeholder="Lattitude" styleClass="txfld"  value="#{university.universityLattitude}" required="true" requiredMessage="Please enter university latitude" id="universityLatitude"><f:validateRegex pattern="^[0-9]+$"/></h:inputText>
+            <h:inputText a:placeholder="Lattitude" styleClass="txfld"  value="#{university.universityLattitude}" required="true" requiredMessage="Please enter university latitude" id="universityLatitude"></h:inputText>
             <br></br>
             <h:message for="universityLongitude" styleClass="txfld" style="color:red" />
             University Longitude*:
-            <h:inputText a:placeholder="Longitude" styleClass="txfld"  value="#{university.universityLongitude}" required="true" requiredMessage="Please enter university longitude" id="universityLongitude" validatorMessage="Longitude must be number"><f:validateRegex pattern="^[0-9]+$"/></h:inputText>
+            <h:inputText a:placeholder="Longitude" styleClass="txfld"  value="#{university.universityLongitude}" required="true" requiredMessage="Please enter university longitude" id="universityLongitude" validatorMessage="Longitude must be number"></h:inputText>
             <br></br>
             
             <h:commandButton value="Update University!" action ="#{university.updateUniversity()}" styleClass="lgnBTN"></h:commandButton>

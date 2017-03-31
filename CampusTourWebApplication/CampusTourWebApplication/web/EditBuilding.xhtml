@@ -28,7 +28,7 @@ and open the template in the editor.
     <ul class="nav navbar-nav">
     
             
-       <li><a href="/CampusTourWebApplication/faces/adminHome.xhtml"  >Universities</a></li>
+       <li><a href="/CampusTourWebApplication/faces/userHome.xhtml"  >Buildings</a></li>
 
       </ul>
       
@@ -56,7 +56,7 @@ and open the template in the editor.
             Description*:
             <h:inputTextarea a:placeholder="Description" styleClass="txfld"  value="#{building.buildingDescription}" required = "true" requiredMessage="Please ENter Description of Building" id="buildingDescription"></h:inputTextarea>
             <!--//Web Pages//resources//#{session.getAttribute("university")}//#{building.buildingName}//#{building.buildingName} Image.zip-->
-            <a href="#{request.contextPath}/Web Pages/resources/NWMSU/#{building.buildingName}/#{building.buildingName} Image.zip" download="#{building.buildingName} Image.zip" >Download Images</a>
+            <a href="#{request.contextPath}/Web Pages/resources/UCM/#{building.buildingName}/#{building.buildingName} Image.zip" download="#{building.buildingName} Image.zip" >Download Images</a>
             <br></br>
             
             Image: <h:inputFile a:placeholder="image" styleClass="txfld"  value="#{building.buildingImage}" ></h:inputFile>
@@ -69,11 +69,11 @@ and open the template in the editor.
             <br></br>
             <h:message for="buildingLatitude" styleClass="txfld" style="color:red" />
             Building Latitude*:
-            <h:inputText a:placeholder="Lattitude" styleClass="txfld"  value="#{building.buildingLattitude}" required="true" requiredMessage="Please enter building latitude" id="buildingLatitude"><f:validateRegex pattern="^[0-9]+$"/></h:inputText>
+            <h:inputText a:placeholder="Lattitude" styleClass="txfld"  value="#{building.buildingLattitude}" required="true" requiredMessage="Please enter building latitude" id="buildingLatitude"></h:inputText>
             <br></br>
             <h:message for="buildingLongitude" styleClass="txfld" style="color:red" />
             Building Longitude*:
-            <h:inputText a:placeholder="Longitude" styleClass="txfld"  value="#{building.buildingLongitude}" required="true" requiredMessage="Please enter building longitude" id="buildingLongitude"><f:validateRegex pattern="^[0-9]+$"/></h:inputText>
+            <h:inputText a:placeholder="Longitude" styleClass="txfld"  value="#{building.buildingLongitude}" required="true" requiredMessage="Please enter building longitude" id="buildingLongitude"></h:inputText>
             <br></br>
             
             <h:commandButton value="Update Building!" action ="#{building.updateBuilding()}" styleClass="lgnBTN"></h:commandButton>
