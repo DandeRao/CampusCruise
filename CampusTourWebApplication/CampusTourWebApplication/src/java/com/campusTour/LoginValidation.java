@@ -177,9 +177,16 @@ public class LoginValidation {
         session.invalidate();
         return "loggedOut";
     }
-
+    
+    /**
+     *Array list to store users
+     */
     public List<LoginValidation> userList = new ArrayList<LoginValidation>() {};
 
+    /**
+     *retriving the list of users
+     * @return list of users in database
+     */
     public List<LoginValidation> userList() {
         userList.clear();
         try {

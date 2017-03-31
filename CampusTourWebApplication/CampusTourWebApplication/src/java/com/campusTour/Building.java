@@ -55,14 +55,6 @@ public class Building {
     //Building Oject
     private Building tempBuilding;
 
-    public Building getTempBuilding() {
-        return tempBuilding;
-    }
-
-    public void setTempBuilding(Building tempBuilding) {
-        this.tempBuilding = tempBuilding;
-    }
-
     /**
      * Method that gets the building audio
      *
@@ -307,14 +299,7 @@ public class Building {
         return "edit";
     }
 
-    /**
-     * This method is used to edit the building details
-     *
-     * @return building object
-     */
-//    public Building editBuildingDetails() {
-//        
-//    }
+
     /**
      * This method deletes the building details from database
      *
@@ -353,6 +338,7 @@ public class Building {
      * Methods that updates university details
      *
      * @return string
+     * @throws java.io.IOException
      */
     public String updateBuilding() throws IOException {
 
@@ -403,6 +389,11 @@ public class Building {
         return "updated";
     }
 
+    /**
+     *
+     * @param file that need to be deleted
+     * @return whether the file is deleted or not
+     */
     public boolean deleteDir(File file) {
         File[] contents = file.listFiles();
         if (contents != null) {
