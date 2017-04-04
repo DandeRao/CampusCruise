@@ -189,42 +189,54 @@ public class Building {
      * @return string
      */
     public String addBuilding() {
-        String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("resources");
+        
 
-        path = path.substring(0, path.indexOf("\\build"));
-        path = path + "\\web\\resources\\";
+        
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour", "root", "");
             Statement st = con.createStatement();
-            String path1 = path + "\\" + session.getAttribute("university");
-            String path0 = path1 + "\\" + this.getBuildingName();
+            String path = "C:\\CampusTourFiles\\RawFiles";
+            String univ = ((String)session.getAttribute("university")).replace(" ","");
+            String path1 = path + "\\" + univ;
+            String path0 = path1 + "\\" + (this.getBuildingName()).replaceAll(" ", "");
+            String path2 = path0+"\\Images";
+            String path3 = path0+"\\Audio";
+            String path4 = path0+"\\Video";
 
             File folder = new File(path1);
             File folder0 = new File(path0);
-
+            File folder2 = new File(path2);
+            File folder3 = new File(path3);
+            File folder4 = new File(path4);
             if (folder.exists()) {
                 folder0.mkdir();
-
+                folder2.mkdir();
+                folder3.mkdir();
+                folder4.mkdir();
             } else {
                 folder.mkdir();
                 folder0.mkdir();
+                folder2.mkdir();
+                folder3.mkdir();
+                folder4.mkdir();
             }
             InputStream fp = buildingImage.getInputStream();
+            
             byte[] data = new byte[fp.available()];
             fp.read(data);
-            FileOutputStream fout = new FileOutputStream(new File(path0 + "\\" + this.buildingName + " Image.zip"));
+            FileOutputStream fout = new FileOutputStream(new File(path2 + "\\" + this.buildingName.replaceAll(" ", "") + "Image."+buildingImage.getContentType().split("/")[1]));
             fout.write(data);
             fp = buildingAudio.getInputStream();
             data = new byte[fp.available()];
             fp.read(data);
-            fout = new FileOutputStream(new File(path0 + "\\" + this.buildingName + " Audio.zip"));
+            fout = new FileOutputStream(new File(path3 + "\\" + this.buildingName.replaceAll(" ", "") + "Audio."+buildingAudio.getContentType().split("/")[1]));
             fout.write(data);
             fp = buildingVideo.getInputStream();
             data = new byte[fp.available()];
             fp.read(data);
-            fout = new FileOutputStream(new File(path0 + "\\" + this.buildingName + " Video.zip"));
+            fout = new FileOutputStream(new File(path4 + "\\" + this.buildingName.replaceAll(" ", "") + "Video."+buildingVideo.getContentType().split("/")[1]));
             fout.write(data);
             fp.close();
             fout.close();
@@ -235,9 +247,9 @@ public class Building {
             result.next();
             int id = result.getInt("university_id");
             //String word = pathString(path0.split("\\"));
-            String imageAddress = path0 + "\\" + this.buildingName + " Image.zip";
-            String audioAddress = path0 + "\\" + this.buildingName + " Audio.zip";
-            String videoAddress = path0 + "\\" + this.buildingName + " Video.zip";
+            String imageAddress = path0 + "\\Images\\" + this.buildingName.replaceAll(" ", "") + "Image";
+            String audioAddress = path0 + "\\Audio\\" + this.buildingName.replaceAll(" ", "") + "Audio";
+            String videoAddress = path0 + "\\Video\\" + this.buildingName.replaceAll(" ", "") + "Video";
             st.executeUpdate("insert into building values('" + (count + 1) + "','" + this.getBuildingName() + "','" + this.buildingDescription + "','" + imageAddress + "','" + audioAddress + "','" + videoAddress + "','" + this.getBuildingLattitude() + "','" + this.getBuildingLongitude() + "','" + id + "')");
 
             
@@ -312,15 +324,16 @@ public class Building {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour", "root", "");
             Statement st = con.createStatement();
-            String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("resources");
-            path = path.substring(0, path.indexOf("\\build"));
-            path = path + "\\web\\resources\\";
-            String path1 = path + "\\" + session.getAttribute("university");
-            String path0 = path1 + "\\" + buildingName;
+            String path = "C:\\CampusTourFiles\\RawFiles";
+            String univ = ((String)session.getAttribute("university")).replace(" ","");
+            String path1 = path + "\\" + univ;
+            String path0 = path1 + "\\" + (buildingName).replaceAll(" ", "");
             File folder = new File(path0);
             if (folder.exists()) {
 
-                deleteDir(folder);
+               if( deleteDir(folder)){
+                   
+               }
 
             }
             ResultSet rs = st.executeQuery("select university_id from university where university_name = '" + session.getAttribute("university") + "'");
@@ -343,14 +356,13 @@ public class Building {
     public String updateBuilding() throws IOException {
 
         try {
-            String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("resources");
-            path = path.substring(0, path.indexOf("\\build"));
-            path = path + "\\web\\resources\\";
-            String path1 = path + "\\" + session.getAttribute("university");
-            String path0 = path1 + "\\" + buildingName;
-            File folder = new File(path0+"\\"+buildingName+" Image.zip");
-            File folder1 = new File(path0+"\\"+buildingName+" Audio.zip");
-            File folder2 = new File(path0+"\\"+buildingName+" Video.zip");
+            String path = "C:\\CampusTourFiles\\RawFiles";
+            String univ = ((String)session.getAttribute("university")).replace(" ","");
+            String path1 = path + "\\" + univ;
+            String path0 = path1 + "\\" + (this.getBuildingName()).replaceAll(" ", "");
+            File folder = new File(path0+"\\Images\\"+buildingName.replaceAll(" ", "")+"Image");
+            File folder1 = new File(path0+"\\Audio\\"+buildingName.replaceAll(" ", "")+"Audio");
+            File folder2 = new File(path0+"\\Video\\"+buildingName.replaceAll(" ", "")+"Video");
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour", "root", "");
             Statement st = con.createStatement();
@@ -358,27 +370,33 @@ public class Building {
             rs.next();
             int a = rs.getInt("building_id");
             if (this.getBuildingImage() != null) {
+                if(folder.exists()){
                 deleteDir(folder);
+                }
                 InputStream fp = buildingImage.getInputStream();
                 byte[] data = new byte[fp.available()];
                 fp.read(data);
-                FileOutputStream fout = new FileOutputStream(new File(path0 + "\\" + this.buildingName + " Image.zip"));
+                FileOutputStream fout = new FileOutputStream(new File(path0 + "\\Images\\" + this.buildingName.replaceAll(" ", "") +"Image."+buildingImage.getContentType().split("/")[1]));
                 fout.write(data);
             }
             if (this.getBuildingAudio() != null) {
+                if(folder1.exists()){
                 deleteDir(folder1);
+                }
                 InputStream fp = buildingAudio.getInputStream();
                 byte[] data = new byte[fp.available()];
                 fp.read(data);
-                FileOutputStream fout = new FileOutputStream(new File(path0 + "\\" + this.buildingName + " Audio.zip"));
+                FileOutputStream fout = new FileOutputStream(new File(path0 + "\\Audio\\" + this.buildingName.replaceAll(" ", "") + "Audio."+buildingAudio.getContentType().split("/")[1]));
                 fout.write(data);
             }
             if (this.getBuildingVideo() != null) {
+                if(folder2.exists()){
                 deleteDir(folder2);
+                }
                 InputStream fp = buildingVideo.getInputStream();
                 byte[] data = new byte[fp.available()];
                 fp.read(data);
-                FileOutputStream fout = new FileOutputStream(new File(path0 + "\\" + this.buildingName + " Video.zip"));
+                FileOutputStream fout = new FileOutputStream(new File(path0 + "\\Video\\" + this.buildingName.replaceAll(" ", "") + "Video."+buildingVideo.getContentType().split("/")[1]));
                 fout.write(data);
             }
             st.executeUpdate("update building set building_name = '" + this.getBuildingName() + "',building_description='" + this.getBuildingDescription() + "',building_image='" + this.getBuildingImage() + "',building_audio='" + this.getBuildingAudio() + "',building_video='" + this.getBuildingVideo() + "',building_lattitude='" + this.getBuildingLattitude() + "',building_longitude='" + this.getBuildingLongitude() + "' where building_id='" + a + "'");

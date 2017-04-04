@@ -129,9 +129,9 @@ public class University {
                 int count = rs.getInt(1);
 
                 st.executeUpdate("insert into university values('" + (count + 1) + "','" + this.getUnivName() + "','" + this.getUser() + "', '" + this.getUniversityLattitude() + "','" + this.getUniversityLongitude() + "')");
-                String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("resources");
-                path = path.substring(0, path.indexOf("\\build"));
-                path = path + "\\web\\resources\\" + this.getUnivName();
+                String path = "C:\\CampusTourFiles\\RawFiles";
+                String univ = (this.getUnivName()).replace(" ","");
+                path = path + "\\" + univ;
                 File folder = new File(path);
                 if (!folder.exists()) {
                     folder.mkdir();
@@ -144,9 +144,9 @@ public class University {
                 int count = rs.getInt(1);
 
                 st.executeUpdate("insert into university values('" + (count + 1) + "','" + this.getUnivName() + "','" + this.getUser() + "', '" + this.getUniversityLattitude() + "','" + this.getUniversityLongitude() + "')");
-                String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("resources");
-                path = path.substring(0, path.indexOf("\\build"));
-                path = path + "\\web\\resources\\" + this.getUnivName();
+                String path = "C:\\CampusTourFiles\\RawFiles";
+                String univ = (this.getUnivName()).replace(" ","");
+                path = path + "\\" + univ;
                 File folder = new File(path);
                 if (!folder.exists()) {
                     folder.mkdir();
@@ -251,11 +251,10 @@ public class University {
             ResultSet rs = st.executeQuery("select email from university where university_name = '" + universityName + "'");
             rs.next();
             String email = rs.getString("email");
-            String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("resources");
-            path = path.substring(0, path.indexOf("\\build"));
-            path = path + "\\web\\resources\\";
-            String path1 = path + "\\" + universityName;
-            File folder = new File(path1);
+            String path = "C:\\CampusTourFiles\\RawFiles";
+                String univ = (this.getUnivName()).replace(" ","");
+                path = path + "\\" + univ;
+            File folder = new File(path);
             if (folder.exists()) {
                 deleteDir(folder);
             }
@@ -304,6 +303,7 @@ public class University {
      */
     public boolean deleteDir(File file) {
     File[] contents = file.listFiles();
+    
     if (contents != null) {
         for (File f : contents) {
             deleteDir(f);

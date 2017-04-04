@@ -9,8 +9,8 @@ import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 import javax.servlet.http.Part;
  
-@FacesValidator(value="fileUploadValidator")
-public class FileUploadValidator implements Validator{
+@FacesValidator(value="imageUploadValidator")
+public class ImageUploadValidator implements Validator{
  
     /**
      *
@@ -29,8 +29,8 @@ public class FileUploadValidator implements Validator{
  
             if (file==null || file.getSize()<=0 || file.getContentType().isEmpty() )
                 message=new FacesMessage("Select a valid file");
-            else if (!file.getContentType().endsWith("zip-compressed")) {
-                message=new FacesMessage(file.getContentType());
+            else if (!(file.getContentType().endsWith("png")||file.getContentType().endsWith("jpg")||file.getContentType().endsWith("jpeg"))) {
+                message=new FacesMessage(file.getContentType().endsWith("jpg")+"");
             } else {
             }
 //            else if (file.getSize()>2000000)

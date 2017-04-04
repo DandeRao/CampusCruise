@@ -48,17 +48,17 @@ and open the template in the editor.
             <br></br>
             <h:inputText a:placeholder="Building Description" styleClass="txfld"  value="#{building.buildingDescription}" ></h:inputText>
             <br></br>
-            <h:inputFile a:placeholder="Building Image" styleClass="txfld" value="#{building.buildingImage}" ><f:validator validatorId="fileUploadValidator"/></h:inputFile>
+            <h:inputFile a:placeholder="Building Image" styleClass="txfld" value="#{building.buildingImage}" ><f:validator validatorId="imageUploadValidator"/></h:inputFile>
             <br></br>
-            <h:inputFile a:placeholder="Building Audio" styleClass="txfld"  value="#{building.buildingAudio}" ><f:validator validatorId="fileUploadValidator"/></h:inputFile>
+            <h:inputFile a:placeholder="Building Audio" styleClass="txfld"  value="#{building.buildingAudio}" ><f:validator validatorId="audioUploadValidator"/></h:inputFile>
             <br></br>
-            <h:inputFile a:placeholder="Building Video" styleClass="txfld"  value="#{building.buildingVideo}" ><f:validator validatorId="fileUploadValidator"/></h:inputFile>
+            <h:inputFile a:placeholder="Building Video" styleClass="txfld"  value="#{building.buildingVideo}" ><f:validator validatorId="videoUploadValidator"/></h:inputFile>
             <br></br>
             <h:inputText a:placeholder="Lattitude" styleClass="txfld"  value="#{building.buildingLattitude}" ></h:inputText>
             <br></br>
             <h:inputText a:placeholder="Longitude" styleClass="txfld"  value="#{building.buildingLongitude}" ></h:inputText>
             <br></br>
-            
+            <h:messages></h:messages>
             <h:commandButton value="Add Building!" action ="#{building.addBuilding()}" styleClass="lgnBTN"></h:commandButton>
                 
         </h:form>
