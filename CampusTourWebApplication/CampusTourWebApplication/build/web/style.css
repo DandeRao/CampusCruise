@@ -57,3 +57,19 @@ background-image: none;
 #fp{
 	margin: 30%;
 }
+.order-table-header{
+  bbook-bottom:1px solid #BBB;
+  padding:16px;
+}
+
+.order-table-odd-row{
+  bbook-top:1px solid #BBB;
+}
+
+.order-table-even-row{
+  bbook-top:1px solid #BBB;
+}
+
+.navbar-inverse {
+
+}

@@ -3,12 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <link rel="stylesheet" type="text/css" href="style.css"></link>
+    <link rel="stylesheet" type="text/css" href="../../style.css"></link>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <h:head>
         <title>User Home</title>
+        <link rel="stylesheet" type="text/css" href="style.css"></link>
     </h:head>
     <h:body>
         <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -25,12 +26,13 @@
       </ul>
       
        <ul class="nav navbar-nav navbar-right">
+           
            <h:form>
-           <li><h:commandButton value="Logout" action ="#{loginValidation.logout()}" ></h:commandButton></li>
+           <li><h:commandLink value="Logout" action ="#{loginValidation.logout()}" ></h:commandLink></li>
            </h:form>
       
-    </ul>
       
+    </ul>
   </div>
 </nav>
         
@@ -55,7 +57,7 @@
     			
                     </f:facet>
                 <h:form>
-                        <h:commandButton value="Edit" action ="#{databaseConnection.getBuildingDetails(b.buildingName)}" ></h:commandButton> 
+                        <h:commandLink value="Edit" action ="#{building.getBuildingDetails(b)}" ></h:commandLink> 
                         
                     </h:form>
                     
@@ -67,7 +69,7 @@
           
                     </f:facet>
     		<h:form>
-      <h:commandButton value="Delete" action ="#{databaseConnection.deleteBuildingDetails(b.buildingName)}" ></h:commandButton> 
+      <h:commandLink value="Delete" action ="#{building.deleteBuildingDetails(b.buildingName)}" ></h:commandLink> 
       </h:form>
     		</h:column>
 

@@ -25,11 +25,15 @@
             <h1><span id="heading">Log In</span></h1>
 
             
-            <h:outputText value="#{loginValidation.outputMessage}"></h:outputText>
-            <h:inputText a:placeholder="Email" styleClass="txfld"  value="#{loginValidation.email}" ></h:inputText>
+            <h:outputText value="#{loginValidation.outputMessage}" styleClass="txfld" style="color:red"></h:outputText><br></br>
+            <h:message for="email" styleClass="txfld" style="color:red" />
+            <h:inputText a:placeholder="Email" styleClass="txfld"  value="#{loginValidation.email}" required="true" requiredMessage="Please enter your Email address" id="email"></h:inputText>
+            
             <br></br>
-                    <h:inputSecret a:placeholder="Password" styleClass="txfld"  value="#{loginValidation.password}" ></h:inputSecret>
+            <h:message for="password" styleClass="txfld" style="color:red" /><br></br>
+            <h:inputSecret a:placeholder="Password" styleClass="txfld"  value="#{loginValidation.password}" required="true" requiredMessage="Please enter Password" id="password"></h:inputSecret>
                     <br></br>
+                    
                 <a href="forgotPassword.xhtml" id="fp">Forgot password?</a>
                 <h:commandButton value="Log me in!" action ="#{loginValidation.validatingUsernamePassword()}" styleClass="lgnBTN"></h:commandButton>
                 
