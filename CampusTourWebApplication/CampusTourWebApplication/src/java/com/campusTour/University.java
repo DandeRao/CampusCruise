@@ -39,6 +39,16 @@ public class University {
     public University() {
 
     }
+    public String outputMessage;
+
+    public String getOutputMessage() {
+        return outputMessage;
+    }
+
+    public void setOutputMessage(String outputMessage) {
+        this.outputMessage = outputMessage;
+    }
+    
     //Getting the current instance using face context
     HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
     //created seesion
@@ -114,14 +124,32 @@ public class University {
      */
     public String addUniversity() {
         try {
+            
 
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour", "root", "");
 
             Statement st = con.createStatement();
-            ResultSet r = st.executeQuery("select count(*) from user where email='" + this.getUser() + "'");
+            
+            
+            ResultSet r = st.executeQuery("select count(*) from university where university_name='" + this.getUnivName() + "'");
             r.next();
             int number = r.getInt(1);
+            if (number != 0) {
+            
+            outputMessage="University Already exists";
+            return "";
+            
+            }
+            
+            
+            
+            
+            
+            
+            r = st.executeQuery("select count(*) from user where email='" + this.getUser() + "'");
+            r.next();
+             number = r.getInt(1);
             if (number == 0) {
                 st.executeUpdate("insert into user values('" + this.getUser() + "','" + this.getPassword() + "','user')");
                 ResultSet rs = st.executeQuery("select max(university_id) from university");
@@ -137,20 +165,7 @@ public class University {
                     folder.mkdir();
                 }
             } else {
-                st.executeUpdate("delete from user where email='"+this.getUser()+"'");
-               st.executeUpdate("insert into user values('" + this.getUser() + "','" + this.getPassword() + "','user')");
-                ResultSet rs = st.executeQuery("select max(university_id) from university");
-                rs.next();
-                int count = rs.getInt(1);
-
-                st.executeUpdate("insert into university values('" + (count + 1) + "','" + this.getUnivName() + "','" + this.getUser() + "', '" + this.getUniversityLattitude() + "','" + this.getUniversityLongitude() + "')");
-                String path = "C:\\CampusTourFiles\\RawFiles";
-                String univ = (this.getUnivName()).replace(" ","");
-                path = path + "\\" + univ;
-                File folder = new File(path);
-                if (!folder.exists()) {
-                    folder.mkdir();
-                }
+                outputMessage="Email is already assigned to a university please give another email";
                 return "";
             }
         } catch (ClassNotFoundException | SQLException e) {
@@ -171,10 +186,19 @@ public class University {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour", "root", "");
             Statement st = con.createStatement();
+            
             ResultSet rs = st.executeQuery("select university_id from university where university_name='"+session.getAttribute("editUnivName")+"'");
             rs.next();
             int a = rs.getInt("university_id");
+            ResultSet r = st.executeQuery("select count(*) from university where university_name='"+this.getUnivName()+"' and university_id!='" + a + "'");
+            r.next();
+            int number = r.getInt(1);
+            if (number != 0) {
             
+            outputMessage="University Already exists";
+            return "";
+            
+            }
             
             st.executeUpdate("update university set university_name = '"+this.getUnivName()+"',university_lattitude = '"+this.getUniversityLattitude()+"',university_longitude= '"+this.getUniversityLongitude()+"' where university_id='"+a+"'");
             
@@ -252,7 +276,7 @@ public class University {
             rs.next();
             String email = rs.getString("email");
             String path = "C:\\CampusTourFiles\\RawFiles";
-                String univ = (this.getUnivName()).replace(" ","");
+                String univ = (universityName).replace(" ","");
                 path = path + "\\" + univ;
             File folder = new File(path);
             if (folder.exists()) {

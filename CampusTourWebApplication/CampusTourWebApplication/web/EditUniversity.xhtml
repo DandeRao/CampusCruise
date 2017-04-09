@@ -43,9 +43,10 @@ and open the template in the editor.
 </nav>
     
         <div id="container">
-            <h:outputText value="#{loginValidation.outputMessage}"></h:outputText>
+            
         <h:form>
             <h1><span id="heading">Edit University</span></h1>
+            <h:outputText value="#{university.outputMessage}" styleClass="txfld" style="color:red"></h:outputText><br></br>
             <h:message for="universityName" styleClass="txfld" style="color:red" />
             University Name*: <h:inputText a:placeholder="University Name" styleClass="txfld"  value="#{university.univName}" required="true" requiredMessage="Please Enter University Name" id="universityName"></h:inputText>
             <br></br>

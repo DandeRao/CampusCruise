@@ -9,19 +9,25 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import static java.lang.System.in;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.inject.Named;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
+
+
 
 /**
  *
@@ -39,9 +45,9 @@ public class Building {
     //created seesion
     HttpSession session = request.getSession();
     //Images of building 
-    private Part buildingImage;
+    private List<Part> buildingImage;
     //viodeos of building
-    private Part buildingVideo;
+    private List<Part> buildingVideo;
     //Lattitude of the building
     private double buildingLattitude;
     //Longitude of the building
@@ -51,17 +57,26 @@ public class Building {
     //Description of the building
     private String buildingDescription;
     //Audios of the building
-    private Part buildingAudio;
+    private List<Part> buildingAudio;
     //Building Oject
     private Building tempBuilding;
+    private String outputMessage;
+
+    public String getOutputMessage() {
+        return outputMessage;
+    }
+
+    public void setOutputMessage(String outputMessage) {
+        this.outputMessage = outputMessage;
+    }
 
     /**
      * Method that gets the building audio
      *
      * @return buildingAudio
      */
-    public Part getBuildingAudio() {
-        return buildingAudio;
+    public  List<Part> getBuildingAudio() {
+        return this.buildingAudio;
     }
 
     /**
@@ -70,7 +85,7 @@ public class Building {
      * @param buildingAudio audio of the building
      *
      */
-    public void setBuildingAudio(Part buildingAudio) {
+    public void setBuildingAudio(List<Part> buildingAudio) {
         this.buildingAudio = buildingAudio;
     }
 
@@ -79,8 +94,8 @@ public class Building {
      *
      * @return buildingImage
      */
-    public Part getBuildingImage() {
-        return buildingImage;
+    public List<Part> getBuildingImage() {
+        return this.buildingImage;
     }
 
     /**
@@ -89,7 +104,7 @@ public class Building {
      * @param buildingImage image of the building
      *
      */
-    public void setBuildingImage(Part buildingImage) {
+    public void setBuildingImage(List<Part> buildingImage) {
         this.buildingImage = buildingImage;
     }
 
@@ -98,8 +113,8 @@ public class Building {
      *
      * @return buildingVideo
      */
-    public Part getBuildingVideo() {
-        return buildingVideo;
+    public List<Part> getBuildingVideo() {
+        return this.buildingVideo;
     }
 
     /**
@@ -107,7 +122,7 @@ public class Building {
      *
      * @param buildingVideo vide of the building
      */
-    public void setBuildingVideo(Part buildingVideo) {
+    public void setBuildingVideo(List<Part> buildingVideo) {
         this.buildingVideo = buildingVideo;
     }
 
@@ -188,22 +203,30 @@ public class Building {
      *
      * @return string
      */
-    public String addBuilding() {
-        
-
-        
+    public String addBuilding() throws IOException {
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour", "root", "");
             Statement st = con.createStatement();
+            ResultSet result = st.executeQuery("select university_id from university where university_name = '" + session.getAttribute("university") + "'");
+            result.next();
+            int id = result.getInt("university_id");
+            ResultSet rs = st.executeQuery("select count(*) from building where building_name='" + this.getBuildingName() + "' and university_id='" + id + "'");
+            rs.next();
+            int count = rs.getInt(1);
+            if (count != 0) {
+                outputMessage = "Building Name already exists";
+                return "";
+            }
+
             String path = "C:\\CampusTourFiles\\RawFiles";
-            String univ = ((String)session.getAttribute("university")).replace(" ","");
+            String univ = ((String) session.getAttribute("university")).replace(" ", "");
             String path1 = path + "\\" + univ;
             String path0 = path1 + "\\" + (this.getBuildingName()).replaceAll(" ", "");
-            String path2 = path0+"\\Images";
-            String path3 = path0+"\\Audio";
-            String path4 = path0+"\\Video";
+            String path2 = path0 + "\\Images";
+            String path3 = path0 + "\\Audio";
+            String path4 = path0 + "\\Video";
 
             File folder = new File(path1);
             File folder0 = new File(path0);
@@ -222,37 +245,47 @@ public class Building {
                 folder3.mkdir();
                 folder4.mkdir();
             }
-            InputStream fp = buildingImage.getInputStream();
-            
-            byte[] data = new byte[fp.available()];
-            fp.read(data);
-            FileOutputStream fout = new FileOutputStream(new File(path2 + "\\" + this.buildingName.replaceAll(" ", "") + "Image."+buildingImage.getContentType().split("/")[1]));
-            fout.write(data);
-            fp = buildingAudio.getInputStream();
-            data = new byte[fp.available()];
-            fp.read(data);
-            fout = new FileOutputStream(new File(path3 + "\\" + this.buildingName.replaceAll(" ", "") + "Audio."+buildingAudio.getContentType().split("/")[1]));
-            fout.write(data);
-            fp = buildingVideo.getInputStream();
-            data = new byte[fp.available()];
-            fp.read(data);
-            fout = new FileOutputStream(new File(path4 + "\\" + this.buildingName.replaceAll(" ", "") + "Video."+buildingVideo.getContentType().split("/")[1]));
-            fout.write(data);
-            fp.close();
-            fout.close();
-            ResultSet rs = st.executeQuery("select count(*) from building");
-            rs.next();
-            int count = rs.getInt(1);
-            ResultSet result = st.executeQuery("select university_id from university where university_name = '" + session.getAttribute("university") + "'");
+           // Collection<Part> a=getAllParts(buildingImage);
+            for (int i=0;i<buildingImage.size();i++) {
+                InputStream fp = buildingImage.get(i).getInputStream();
+
+                byte[] data = new byte[fp.available()];
+                fp.read(data);
+                FileOutputStream fout = new FileOutputStream(new File(path2 + "\\" + this.buildingName.replaceAll(" ", "") + "Image"+i+"." + buildingImage.get(i).getContentType().split("/")[1]));
+                fout.write(data);
+                fp.close();
+                fout.close();
+            }
+            for (int i=0;i<buildingAudio.size();i++) {
+                InputStream fp = buildingAudio.get(i).getInputStream();
+
+                byte[] data = new byte[fp.available()];
+                fp.read(data);
+                FileOutputStream fout = new FileOutputStream(new File(path2 + "\\" + this.buildingName.replaceAll(" ", "") + "Image"+i+"." + buildingAudio.get(i).getContentType().split("/")[1]));
+                fout.write(data);
+                fp.close();
+                fout.close();
+            }
+            for (int i=0;i<buildingVideo.size();i++) {
+                InputStream fp = buildingVideo.get(i).getInputStream();
+
+                byte[] data = new byte[fp.available()];
+                fp.read(data);
+                FileOutputStream fout = new FileOutputStream(new File(path2 + "\\" + this.buildingName.replaceAll(" ", "") + "Image"+i+"." + buildingVideo.get(i).getContentType().split("/")[1]));
+                fout.write(data);
+                fp.close();
+                fout.close();
+            }
+
+            result = st.executeQuery("select max(building_id) from building");
             result.next();
-            int id = result.getInt("university_id");
+            int building_id = result.getInt(1);
             //String word = pathString(path0.split("\\"));
             String imageAddress = path0 + "\\Images\\" + this.buildingName.replaceAll(" ", "") + "Image";
             String audioAddress = path0 + "\\Audio\\" + this.buildingName.replaceAll(" ", "") + "Audio";
             String videoAddress = path0 + "\\Video\\" + this.buildingName.replaceAll(" ", "") + "Video";
-            st.executeUpdate("insert into building values('" + (count + 1) + "','" + this.getBuildingName() + "','" + this.buildingDescription + "','" + imageAddress + "','" + audioAddress + "','" + videoAddress + "','" + this.getBuildingLattitude() + "','" + this.getBuildingLongitude() + "','" + id + "')");
+            st.executeUpdate("insert into building values('" + (building_id + 1) + "','" + this.getBuildingName() + "','" + this.buildingDescription + "','" + imageAddress + "','" + audioAddress + "','" + videoAddress + "','" + this.getBuildingLattitude() + "','" + this.getBuildingLongitude() + "','" + id + "')");
 
-            
         } catch (ClassNotFoundException | SQLException | IOException e) {
 
         }
@@ -311,7 +344,6 @@ public class Building {
         return "edit";
     }
 
-
     /**
      * This method deletes the building details from database
      *
@@ -325,15 +357,15 @@ public class Building {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour", "root", "");
             Statement st = con.createStatement();
             String path = "C:\\CampusTourFiles\\RawFiles";
-            String univ = ((String)session.getAttribute("university")).replace(" ","");
+            String univ = ((String) session.getAttribute("university")).replace(" ", "");
             String path1 = path + "\\" + univ;
             String path0 = path1 + "\\" + (buildingName).replaceAll(" ", "");
             File folder = new File(path0);
             if (folder.exists()) {
 
-               if( deleteDir(folder)){
-                   
-               }
+                if (deleteDir(folder)) {
+
+                }
 
             }
             ResultSet rs = st.executeQuery("select university_id from university where university_name = '" + session.getAttribute("university") + "'");
@@ -357,48 +389,26 @@ public class Building {
 
         try {
             String path = "C:\\CampusTourFiles\\RawFiles";
-            String univ = ((String)session.getAttribute("university")).replace(" ","");
+            String univ = ((String) session.getAttribute("university")).replace(" ", "");
             String path1 = path + "\\" + univ;
             String path0 = path1 + "\\" + (this.getBuildingName()).replaceAll(" ", "");
-            File folder = new File(path0+"\\Images\\"+buildingName.replaceAll(" ", "")+"Image");
-            File folder1 = new File(path0+"\\Audio\\"+buildingName.replaceAll(" ", "")+"Audio");
-            File folder2 = new File(path0+"\\Video\\"+buildingName.replaceAll(" ", "")+"Video");
+            File folder = new File(path0 + "\\Images\\" + buildingName.replaceAll(" ", "") + "Image");
+            File folder1 = new File(path0 + "\\Audio\\" + buildingName.replaceAll(" ", "") + "Audio");
+            File folder2 = new File(path0 + "\\Video\\" + buildingName.replaceAll(" ", "") + "Video");
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour", "root", "");
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery("select building_id from building where building_name='" + session.getAttribute("editbuildingName") + "'");
             rs.next();
             int a = rs.getInt("building_id");
-            if (this.getBuildingImage() != null) {
-                if(folder.exists()){
-                deleteDir(folder);
-                }
-                InputStream fp = buildingImage.getInputStream();
-                byte[] data = new byte[fp.available()];
-                fp.read(data);
-                FileOutputStream fout = new FileOutputStream(new File(path0 + "\\Images\\" + this.buildingName.replaceAll(" ", "") +"Image."+buildingImage.getContentType().split("/")[1]));
-                fout.write(data);
+            rs = st.executeQuery("select count(*) from building where building_name='" + this.getBuildingName() + "' and building_id!='" + a + "'");
+            rs.next();
+            int count = rs.getInt(1);
+            if (count != 0) {
+                outputMessage = "Building Name already exists";
+                return "";
             }
-            if (this.getBuildingAudio() != null) {
-                if(folder1.exists()){
-                deleteDir(folder1);
-                }
-                InputStream fp = buildingAudio.getInputStream();
-                byte[] data = new byte[fp.available()];
-                fp.read(data);
-                FileOutputStream fout = new FileOutputStream(new File(path0 + "\\Audio\\" + this.buildingName.replaceAll(" ", "") + "Audio."+buildingAudio.getContentType().split("/")[1]));
-                fout.write(data);
-            }
-            if (this.getBuildingVideo() != null) {
-                if(folder2.exists()){
-                deleteDir(folder2);
-                }
-                InputStream fp = buildingVideo.getInputStream();
-                byte[] data = new byte[fp.available()];
-                fp.read(data);
-                FileOutputStream fout = new FileOutputStream(new File(path0 + "\\Video\\" + this.buildingName.replaceAll(" ", "") + "Video."+buildingVideo.getContentType().split("/")[1]));
-                fout.write(data);
-            }
+            
             st.executeUpdate("update building set building_name = '" + this.getBuildingName() + "',building_description='" + this.getBuildingDescription() + "',building_image='" + this.getBuildingImage() + "',building_audio='" + this.getBuildingAudio() + "',building_video='" + this.getBuildingVideo() + "',building_lattitude='" + this.getBuildingLattitude() + "',building_longitude='" + this.getBuildingLongitude() + "' where building_id='" + a + "'");
 
         } catch (ClassNotFoundException | SQLException e) {
@@ -406,7 +416,6 @@ public class Building {
         }
         return "updated";
     }
-
     /**
      *
      * @param file that need to be deleted
@@ -420,6 +429,11 @@ public class Building {
             }
         }
         return file.delete();
+    }
+
+    public static Collection<Part> getAllParts(Part part) throws ServletException, IOException {
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        return request.getParts().stream().filter(p -> part.getName().equals(p.getName())).collect(Collectors.toList());
     }
 
 }
