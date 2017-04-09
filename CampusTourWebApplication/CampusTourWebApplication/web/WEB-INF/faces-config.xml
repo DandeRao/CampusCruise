@@ -42,7 +42,7 @@
             <from-view-id>EditUniversity.xhtml</from-view-id>
             <from-action>#{university.updateUniversity()}</from-action>
             <from-outcome>updated</from-outcome>
-            <to-view-id>successEdit.xhtml</to-view-id>
+            <to-view-id>successUnivEdit.xhtml</to-view-id>
             
         </navigation-case>
         <navigation-case>
@@ -70,14 +70,14 @@
             <from-view-id>adminHome.xhtml</from-view-id>
             <from-action>#{building.deleteUniversityDetails(c.univName)}</from-action>
             <from-outcome>delete</from-outcome>
-            <to-view-id>successPage.xhtml</to-view-id>
+            <to-view-id>successUnivDelete.xhtml</to-view-id>
             
         </navigation-case>
         <navigation-case>
             <from-view-id>userHome.xhtml</from-view-id>
             <from-action>#{building.deleteBuildingDetails(b.buildingName)}</from-action>
             <from-outcome>delete</from-outcome>
-            <to-view-id>successPage.xhtml</to-view-id>
+            <to-view-id>successDelete.xhtml</to-view-id>
             
         </navigation-case>
         <render-kit>

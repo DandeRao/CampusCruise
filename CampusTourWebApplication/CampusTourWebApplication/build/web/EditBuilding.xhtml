@@ -59,13 +59,14 @@ and open the template in the editor.
             <a href="#{request.contextPath}/Web Pages/resources/UCM/#{building.buildingName}/#{building.buildingName} Image.zip" download="#{building.buildingName} Image.zip" >Download Images</a>
             <br></br>
             
-            Image: <h:inputFile a:placeholder="image" styleClass="txfld"  value="#{building.buildingImage}" ></h:inputFile>
-            <br></br>
-            Audio:
-            <h:inputFile a:placeholder="audio" styleClass="txfld"  value="#{building.buildingAudio}" ></h:inputFile>
-            <br></br>
-            Video:
-            <h:inputFile a:placeholder="video" styleClass="txfld"  value="#{building.buildingVideo}" ></h:inputFile>
+            Image:  <h:inputFile a:placeholder="Building Image" styleClass="txfld" value="#{building.buildingImage}" a:multiple="true"><!--<f:validator validatorId="imageUploadValidator"/>--></h:inputFile>
+                <br></br>
+                Audio:
+                <h:inputFile a:placeholder="Building Audio" styleClass="txfld"  value="#{building.buildingAudio}" a:multiple="true"><!--<f:validator validatorId="audioUploadValidator"/>--></h:inputFile>
+                <br></br>
+                Video:
+                <h:inputFile a:placeholder="Building Video" styleClass="txfld"  value="#{building.buildingVideo}" a:multiple="true"><!--<f:validator validatorId="videoUploadValidator"/>--></h:inputFile>
+               
             <br></br>
             <h:message for="buildingLatitude" styleClass="txfld" style="color:red" />
             Building Latitude*:

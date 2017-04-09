@@ -261,7 +261,7 @@ public class Building {
 
                 byte[] data = new byte[fp.available()];
                 fp.read(data);
-                FileOutputStream fout = new FileOutputStream(new File(path2 + "\\" + this.buildingName.replaceAll(" ", "") + "Image"+i+"." + buildingAudio.get(i).getContentType().split("/")[1]));
+                FileOutputStream fout = new FileOutputStream(new File(path3 + "\\" + this.buildingName.replaceAll(" ", "") + "Image"+i+"." + buildingAudio.get(i).getContentType().split("/")[1]));
                 fout.write(data);
                 fp.close();
                 fout.close();
@@ -271,7 +271,7 @@ public class Building {
 
                 byte[] data = new byte[fp.available()];
                 fp.read(data);
-                FileOutputStream fout = new FileOutputStream(new File(path2 + "\\" + this.buildingName.replaceAll(" ", "") + "Image"+i+"." + buildingVideo.get(i).getContentType().split("/")[1]));
+                FileOutputStream fout = new FileOutputStream(new File(path4 + "\\" + this.buildingName.replaceAll(" ", "") + "Image"+i+"." + buildingVideo.get(i).getContentType().split("/")[1]));
                 fout.write(data);
                 fp.close();
                 fout.close();
@@ -392,9 +392,9 @@ public class Building {
             String univ = ((String) session.getAttribute("university")).replace(" ", "");
             String path1 = path + "\\" + univ;
             String path0 = path1 + "\\" + (this.getBuildingName()).replaceAll(" ", "");
-            File folder = new File(path0 + "\\Images\\" + buildingName.replaceAll(" ", "") + "Image");
-            File folder1 = new File(path0 + "\\Audio\\" + buildingName.replaceAll(" ", "") + "Audio");
-            File folder2 = new File(path0 + "\\Video\\" + buildingName.replaceAll(" ", "") + "Video");
+            String path2 = path0 + "\\Images";
+            String path3 = path0 + "\\Audio";
+            String path4 = path0 + "\\Video";
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost/campus_tour", "root", "");
             Statement st = con.createStatement();
@@ -408,7 +408,36 @@ public class Building {
                 outputMessage = "Building Name already exists";
                 return "";
             }
-            
+            for (int i=0;i<buildingImage.size();i++) {
+                InputStream fp = buildingImage.get(i).getInputStream();
+
+                byte[] data = new byte[fp.available()];
+                fp.read(data);
+                FileOutputStream fout = new FileOutputStream(new File(path2 + "\\" + this.buildingName.replaceAll(" ", "") + "Image"+i+"." + buildingImage.get(i).getContentType().split("/")[1]));
+                fout.write(data);
+                fp.close();
+                fout.close();
+            }
+            for (int i=0;i<buildingAudio.size();i++) {
+                InputStream fp = buildingAudio.get(i).getInputStream();
+
+                byte[] data = new byte[fp.available()];
+                fp.read(data);
+                FileOutputStream fout = new FileOutputStream(new File(path3 + "\\" + this.buildingName.replaceAll(" ", "") + "Audio"+i+"." + buildingAudio.get(i).getContentType().split("/")[1]));
+                fout.write(data);
+                fp.close();
+                fout.close();
+            }
+            for (int i=0;i<buildingVideo.size();i++) {
+                InputStream fp = buildingVideo.get(i).getInputStream();
+
+                byte[] data = new byte[fp.available()];
+                fp.read(data);
+                FileOutputStream fout = new FileOutputStream(new File(path4 + "\\" + this.buildingName.replaceAll(" ", "") + "Video"+i+"." + buildingVideo.get(i).getContentType().split("/")[1]));
+                fout.write(data);
+                fp.close();
+                fout.close();
+            }
             st.executeUpdate("update building set building_name = '" + this.getBuildingName() + "',building_description='" + this.getBuildingDescription() + "',building_image='" + this.getBuildingImage() + "',building_audio='" + this.getBuildingAudio() + "',building_video='" + this.getBuildingVideo() + "',building_lattitude='" + this.getBuildingLattitude() + "',building_longitude='" + this.getBuildingLongitude() + "' where building_id='" + a + "'");
 
         } catch (ClassNotFoundException | SQLException e) {
