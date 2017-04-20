@@ -15,21 +15,31 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        >
+        android:theme="@style/AppTheme">
         <meta-data
             android:name="com.skobbler.ngx.API_KEY"
             android:value="36520a4bb5018375498c5454c3ac72a3f55f912b695fbeb28f9d8d676d976cc6" />
 
-        <activity android:name=".Application.Activities.MainActivity" android:screenOrientation="portrait">
+        <activity
+            android:name=".Application.Activities.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Application.Activities.PhysicalTourActivity" android:screenOrientation="portrait" />
-        <activity android:name=".Application.Activities.TourOverViewActivity" android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Application.Activities.PhysicalTourActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Application.Activities.TourOverViewActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Application.Activities.VirtualTourActivity"></activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>

@@ -96,6 +96,7 @@ dependencies {
     skobblersdk "com.skobbler.ngx:SKMaps:3.0.3"
     compile files('libs/SKMaps.jar')
     compile project(path: ':sdktools')
+    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
 }
 
 task installSKToolsMaps << {

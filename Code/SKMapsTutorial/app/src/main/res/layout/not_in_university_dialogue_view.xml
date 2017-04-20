@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:text="Not In Campus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:textSize="20sp"
+        android:fontFamily="serif"
+        android:typeface="sans"
+        android:textColor="@android:color/white"
+        android:textAlignment="center"
+        android:background="@android:color/holo_green_dark" />
+
+    <TextView
+        android:text="University Name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/not_in_university_university_name"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:paddingTop="10dp" />
+
+    <TextView
+        android:text="You are not near the university premises. If you can't get to campus, you can use the &quot;Virtual Tour&quot; option to shift through the campus or We can get to there if you click &quot;Go there&quot; What would you like to do?"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView4"
+        android:paddingTop="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:padding="15dp"
+        android:textColor="@android:color/black"
+        android:textAlignment="center" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:text="Virtual Tour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/virtual_tour_not_in_university_dialogue_button"
+            android:layout_weight="1"
+            android:background="@android:color/holo_green_dark"
+            android:textColor="@android:color/white"
+            android:layout_margin="10dp" />
+
+        <Button
+            android:text="Go THere"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/go_there_not_in_university_dialogue_button"
+            android:layout_weight="0.67"
+            android:textColor="@android:color/white"
+            android:background="@android:color/holo_green_dark"
+            android:padding="10dp"
+            android:layout_margin="10dp" />
+    </LinearLayout>
+</LinearLayout>

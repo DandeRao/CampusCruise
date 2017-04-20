@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.location.LocationManager;
 import android.nfc.Tag;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.skmapstutorial.Application.Activities.PhysicalTourActivity;
+import com.skmapstutorial.Application.Activities.VirtualTourActivity;
 import com.skmapstutorial.Application.Model.Building;
 import com.skmapstutorial.R;
 
@@ -53,6 +55,35 @@ public class Dialogue_Utilites {
 //        });
 //
 //        dialog.show();
+
+
+    }
+
+
+    public static void showNotInUniversityDialogue(final Activity currnetActivity){
+
+//
+//        final Dialog dialog = new Dialog(currnetActivity);
+//
+//        final Button virtualTour = (Button) dialog.findViewById(R.id.virtual_tour_not_in_university_dialogue_button);
+//        Button goThere = (Button) dialog.findViewById(R.id.go_there_not_in_university_dialogue_button);
+//        dialog.setContentView(R.layout.not_in_university_dialogue_view);
+//        dialog.show();
+//
+//        virtualTour.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent virtualTourIntent = new Intent(currnetActivity, VirtualTourActivity.class);
+//                currnetActivity.startActivity(virtualTourIntent);
+//            }
+//        });
+//
+//        goThere.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                currnetActivity.
+//            }
+//        });
 
 
     }

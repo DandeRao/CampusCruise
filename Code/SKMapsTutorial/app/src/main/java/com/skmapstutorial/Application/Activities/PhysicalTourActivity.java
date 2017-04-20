@@ -104,6 +104,8 @@ public class PhysicalTourActivity extends AppCompatActivity implements SensorEve
     static final int MINIMUM_TIME_UNTILL_MAP_CAN_BE_UPDATED = 30;
     static final float SMOOTH_FACTOR_COMPASS = 0.1f;
     boolean headingOn;
+    SKCoordinate navigationStartCoordinate;
+    SKCoordinate navigationEndCoordinate;
 
     Button continueTourInDialogue;
     Button qrScanButtonInDialogue;
@@ -219,8 +221,7 @@ public class PhysicalTourActivity extends AppCompatActivity implements SensorEve
     }
     public void firstTimeRouteSettings() {
         currentPositionProvider.requestUpdateFromLastPosition();
-        SKCoordinate navigationStartCoordinate;
-        SKCoordinate navigationEndCoordinate;
+
         calculateUniversityRadius();
         try {
             System.out.println("Current Location is: " + currentLocation.toString());
@@ -231,6 +232,9 @@ public class PhysicalTourActivity extends AppCompatActivity implements SensorEve
                 buildingBeingVisited = 0;
 
             } else {
+
+               // Dialogue_Utilites.showNotInUniversityDialogue(PhysicalTourActivity.this);
+                notInUniversityDialogue();
                 navigationStartCoordinate = currentLocation;
                 navigationEndCoordinate = university.getBuildings().get(0).getBuildingCoordinates();
                 buildingBeingVisited = 0;
@@ -248,9 +252,45 @@ public class PhysicalTourActivity extends AppCompatActivity implements SensorEve
         }
         catch(NullPointerException e){
             Toast.makeText(PhysicalTourActivity.this," Sorry!! Location Fix not available yet",Toast.LENGTH_LONG).show();
+
+            notInUniversityDialogue();
+            e.printStackTrace();
         }
         //Use the below to use SKToolsNavigationManager
         //startNavigation(navigationStartCoordinate,navigationEndCoordinate);
+
+    }
+
+    public void notInUniversityDialogue(){
+
+
+        final Dialog dialog = new Dialog(PhysicalTourActivity.this);
+
+         dialog.setContentView(R.layout.not_in_university_dialogue_view);
+        dialog.show();
+        final Button virtualTour = (Button) dialog.findViewById(R.id.virtual_tour_not_in_university_dialogue_button);
+        Button goThere = (Button) dialog.findViewById(R.id.go_there_not_in_university_dialogue_button);
+
+        TextView t =  ((TextView) dialog.findViewById(R.id.not_in_university_university_name));
+        t.setText(university.getUniversityName());
+
+        virtualTour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                Intent virtualTourIntent = new Intent(PhysicalTourActivity.this, VirtualTourActivity.class);
+                startActivity(virtualTourIntent);
+
+            }
+        });
+
+        goThere.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
 
     }
 
@@ -568,7 +608,7 @@ public class PhysicalTourActivity extends AppCompatActivity implements SensorEve
 
     public boolean isUserInUniversity(SKCoordinate currentLocationofUser) {
 
-        Log.d(TAG, "isUserIn University premises? " + (calculateDistance(university.getUniversityLocation(), currentLocationofUser) < universityRadius));
+        Log.d(TAG, "isUserIn University premises? " + (calculateDistance(university.getUniversityLocation(), currentLocationofUser) <  universityRadius));
         return calculateDistance(university.getUniversityLocation(), currentLocationofUser) < universityRadius;
 
     }
@@ -757,7 +797,7 @@ public void destinationReachedDialogue(){
     qrScanButtonInDialogue = (Button) dialog.findViewById(R.id.qr_scan_dialogue_button);
     continueTourInDialogue = (Button) dialog.findViewById(R.id.continue_tour_dialogue_button);
 
-qrScanButtonInDialogue.setOnClickListener(new View.OnClickListener() {
+        qrScanButtonInDialogue.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
         scanQR();
@@ -839,17 +879,17 @@ qrScanButtonInDialogue.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onCurrentPositionUpdate(SKPosition skPosition) {
 
-            try {
-                if (currentLocation.equals(null))
-                    currentLocation = skPosition.getCoordinate();
-            }catch (NullPointerException e){
-                currentLocation = skPosition.getCoordinate();
-            }
-        if(calculateDistance(currentLocation, skPosition.getCoordinate() )>10  ) {
+//            try {
+//                if (currentLocation.equals(null))
+//                    currentLocation = skPosition.getCoordinate();
+//            }catch (NullPointerException e){
+//                currentLocation = skPosition.getCoordinate();
+//            }
+     //   if(calculateDistance(currentLocation, skPosition.getCoordinate() )>10  ) {
             currentLocation = skPosition.getCoordinate();
             SKPositionerManager.getInstance().reportNewGPSPosition(skPosition);
             System.out.println("Location Update Received"+currentLocation.toString());
-        }
+       // }
         // Code here for checking proximity and giving out news
 
         // If in proximity of two buildings then tell u r near two buildings and give out their names and any news of two
@@ -857,7 +897,7 @@ qrScanButtonInDialogue.setOnClickListener(new View.OnClickListener() {
 
     public void startNavigation(SKCoordinate navigationStartCoordinate, SKCoordinate navigationEndCoordinate) {
 
-        skToolsNavigationManager = new SKToolsNavigationManager(PhysicalTourActivity.this, R.id.activity_virtual_tour);
+        skToolsNavigationManager = new SKToolsNavigationManager(PhysicalTourActivity.this, R.id.activity_physical_tour);
         skToolsNavigationManager.setNavigationListener(PhysicalTourActivity.this);
         SKToolsNavigationConfiguration configuration = new SKToolsNavigationConfiguration();
 
