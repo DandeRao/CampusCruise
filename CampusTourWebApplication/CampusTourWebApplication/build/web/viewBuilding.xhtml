@@ -10,10 +10,33 @@ and open the template in the editor.
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <head>
         <title>TODO supply a title</title>
+        <link rel="stylesheet" type="text/css" href="style.css"></link>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </head>
     <body>
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <span class="navbar-brand">Campus Tour</span>
+    </div>
+
+    <ul class="nav navbar-nav">
+    
+            
+       <li><a href="/CampusTourWebApplication/faces/adminHome.xhtml"  >Universities</a></li>
+
+      </ul>
+      
+       <ul class="nav navbar-nav navbar-right">
+           <h:form>
+           <li><h:commandLink value="Logout" action ="#{loginValidation.logout()}" ></h:commandLink></li>
+           </h:form>
+      
+      
+    </ul>
+  </div>
+</nav>
         <div>TODO write content</div>
-        <h:outputLabel value ="databaseConnection."
+        <h:outputLabel value ="building."
     </body>
 </html>

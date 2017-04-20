@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:text="Campus Cruise App"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/current_location_not_available_heading"
+        android:textSize="20sp"
+        android:fontFamily="serif"
+        android:typeface="sans"
+        android:textColor="@android:color/white"
+        android:textAlignment="center"
+        android:background="@android:color/holo_green_dark" />
+
+    <TextView
+        android:text="Current Location Unavailable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/current_location_not_available_heading2"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:paddingTop="10dp" />
+
+    <TextView
+        android:text='If your location is un available for long time you can take the "Virtual Tour"'
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/current_location_not_available_message"
+        android:paddingTop="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:padding="15dp"
+        android:textColor="@android:color/black"
+        android:textAlignment="center" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:text="Virtual Tour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/virtual_tour_not_in_university_dialogue_button"
+            android:layout_weight="1"
+            android:background="@android:color/holo_green_dark"
+            android:textColor="@android:color/white"
+            android:layout_margin="10dp" />
+
+        <Button
+            android:text="Fetch Location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fetch_location_button"
+            android:layout_weight="0.67"
+            android:textColor="@android:color/white"
+            android:background="@android:color/holo_green_dark"
+            android:padding="10dp"
+            android:layout_margin="10dp" />
+    </LinearLayout>
+</LinearLayout>

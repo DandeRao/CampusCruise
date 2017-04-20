@@ -7,7 +7,8 @@ and open the template in the editor.
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" 
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Add University</title>
         <link rel="stylesheet" type="text/css" href="style.css"></link>
@@ -33,7 +34,7 @@ and open the template in the editor.
       
        <ul class="nav navbar-nav navbar-right">
            <h:form>
-           <li><h:commandButton value="Logout" action ="#{loginValidation.logout()}" ></h:commandButton></li>
+           <li><h:commandLink value="Logout" action ="#{loginValidation.logout()}" ></h:commandLink></li>
            </h:form>
       
       
@@ -42,18 +43,29 @@ and open the template in the editor.
 </nav>
     
         <div id="container">
-            <h:outputText value="#{loginValidation.outputMessage}"></h:outputText>
+            
             <h:form>
             <h1><span id="heading">Add University</span></h1>
-            <h:inputText a:placeholder="University Name" styleClass="txfld"  value="#{university.univName}" ></h:inputText>
+            <h:outputText value="#{university.outputMessage}" styleClass="txfld" style="color:red"></h:outputText><br></br>
+            <h:message for="univName" styleClass="txfld" style="color:red" /><br></br>
+            University Name*: <h:inputText a:placeholder="University Name" styleClass="txfld"  value="#{university.univName}" required="true" requiredMessage="Please enter University Name" id='univName'></h:inputText>
+            
             <br></br>
-            <h:inputText a:placeholder="Email Of User" styleClass="txfld"  value="#{university.user}" ></h:inputText>
+            <h:message for="userMail" styleClass="txfld" style="color:red" /><br></br>
+            User Email*: <h:inputText a:placeholder="Email Of User" styleClass="txfld"  value="#{university.user}" required="true" requiredMessage="Please enter User's email" id='userMail'></h:inputText>
+            
             <br></br>
-            <h:inputSecret a:placeholder="Password" styleClass="txfld"  value="#{university.password}" ></h:inputSecret>
+            <h:message for="password" styleClass="txfld" style="color:red" /><br></br>
+            User Password*: <h:inputSecret a:placeholder="Password" styleClass="txfld"  value="#{university.password}" required="true" requiredMessage="Please enter User's Password " id='password'></h:inputSecret>
+            
             <br></br>
-            <h:inputText a:placeholder="Lattitude" styleClass="txfld"  value="#{university.universityLattitude}" ></h:inputText>
+            <h:message for="univLatitude" styleClass="txfld" style="color:red" /><br></br>
+            University Latitude*: <h:inputText a:placeholder="Latitude" styleClass="txfld"  value="#{university.universityLattitude}" required="true" requiredMessage="Please enter University Latitude" id='univLatitude'></h:inputText>
+            
             <br></br>
-            <h:inputText a:placeholder="Longitude" styleClass="txfld"  value="#{university.universityLongitude}" ></h:inputText>
+            <h:message for="univLongitude" styleClass="txfld" style="color:red" /><br></br>
+            University Longitude*: <h:inputText a:placeholder="Longitude" styleClass="txfld"  value="#{university.universityLongitude}" required="true" requiredMessage="Please enter University Longitude" id='univLongitude'></h:inputText>
+            
             <br></br>
             
             <h:commandButton value="Add University!" action ="#{university.addUniversity()}" styleClass="lgnBTN"></h:commandButton>

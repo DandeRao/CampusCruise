@@ -7,7 +7,8 @@ and open the template in the editor.
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" 
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Edit University</title>
         <link rel="stylesheet" type="text/css" href="style.css"></link>
@@ -33,7 +34,7 @@ and open the template in the editor.
       
        <ul class="nav navbar-nav navbar-right">
            <h:form>
-           <li><h:commandButton value="Logout" action ="#{loginValidation.logout()}" ></h:commandButton></li>
+           <li><h:commandLink value="Logout" action ="#{loginValidation.logout()}" ></h:commandLink></li>
            </h:form>
       
       
@@ -42,24 +43,41 @@ and open the template in the editor.
 </nav>
     
         <div id="container">
-            <h:outputText value="#{loginValidation.outputMessage}"></h:outputText>
-            <h:form>
-            <h1><span id="heading">Edit University</span></h1>
-            <h:outputText a:placeholder="building Name" styleClass="txfld"  value="#{databaseConnection.editBuildingDetails().buildingName}" ></h:outputText>
+            <h:outputText value="#{building.outputMessage}"></h:outputText>
+            <h:form enctype="multipart/form-data">
+            <h1><span id="heading">Edit Building</span></h1>
+            <h:message for="buildingName" styleClass="txfld" style="color:red" />
+            Building Name*: 
+            <h:inputText a:placeholder="building Name" styleClass="txfld"  value="#{building.buildingName}" required="true" requiredMessage="Please enter User's email" id='buildingName'></h:inputText>
+            
             <br></br>
-            <h:outputText a:placeholder="Description" styleClass="txfld"  value="#{databaseConnection.editBuildingDetails().buildingDescription}" ></h:outputText>
+            <h:message for="buildingDescription" styleClass="txfld" style="color:red" />
             <br></br>
-            <h:outputText a:placeholder="image" styleClass="txfld"  value="#{databaseConnection.editBuildingDetails().buildingImage}" ></h:outputText>
-            <br></br>
-           
-            <h:outputText a:placeholder="video" styleClass="txfld"  value="#{databaseConnection.editBuildingDetails().buildingVideo}" ></h:outputText>
-            <br></br>
-            <h:outputText a:placeholder="Lattitude" styleClass="txfld"  value="#{databaseConnection.editBuildingDetails().buildingLattitude}" ></h:outputText>
-            <br></br>
-            <h:outputText a:placeholder="Longitude" styleClass="txfld"  value="#{databaseConnection.editBuildingDetails().buildingLongitude}" ></h:outputText>
+            Description*:
+            <h:inputTextarea a:placeholder="Description" styleClass="txfld"  value="#{building.buildingDescription}" required = "true" requiredMessage="Please ENter Description of Building" id="buildingDescription"></h:inputTextarea>
+            <!--//Web Pages//resources//#{session.getAttribute("university")}//#{building.buildingName}//#{building.buildingName} Image.zip-->
+            <a href="#{request.contextPath}/Web Pages/resources/UCM/#{building.buildingName}/#{building.buildingName} Image.zip" download="#{building.buildingName} Image.zip" >Download Images</a>
             <br></br>
             
-            <h:commandButton value="Edit Building!" action ="#{databaseConnection.updateBuilding()}" styleClass="lgnBTN"></h:commandButton>
+            Image:  <h:inputFile a:placeholder="Building Image" styleClass="txfld" value="#{building.buildingImage}" a:multiple="true"><!--<f:validator validatorId="imageUploadValidator"/>--></h:inputFile>
+                <br></br>
+                Audio:
+                <h:inputFile a:placeholder="Building Audio" styleClass="txfld"  value="#{building.buildingAudio}" a:multiple="true"><!--<f:validator validatorId="audioUploadValidator"/>--></h:inputFile>
+                <br></br>
+                Video:
+                <h:inputFile a:placeholder="Building Video" styleClass="txfld"  value="#{building.buildingVideo}" a:multiple="true"><!--<f:validator validatorId="videoUploadValidator"/>--></h:inputFile>
+               
+            <br></br>
+            <h:message for="buildingLatitude" styleClass="txfld" style="color:red" />
+            Building Latitude*:
+            <h:inputText a:placeholder="Lattitude" styleClass="txfld"  value="#{building.buildingLattitude}" required="true" requiredMessage="Please enter building latitude" id="buildingLatitude"></h:inputText>
+            <br></br>
+            <h:message for="buildingLongitude" styleClass="txfld" style="color:red" />
+            Building Longitude*:
+            <h:inputText a:placeholder="Longitude" styleClass="txfld"  value="#{building.buildingLongitude}" required="true" requiredMessage="Please enter building longitude" id="buildingLongitude"></h:inputText>
+            <br></br>
+            
+            <h:commandButton value="Update Building!" action ="#{building.updateBuilding()}" styleClass="lgnBTN"></h:commandButton>
                 
         </h:form>
         </div>
