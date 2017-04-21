@@ -41,11 +41,19 @@ import javax.servlet.http.Part;
 @ManagedBean
 public class Building {
 
+    /**
+     *To get building list
+     * @return
+     */
     public List<Building> getBuildingsList() {
         buildingsList = this.buildingsLists();
         return buildingsList;
     }
 
+    /**
+     *To set the buildings
+     * @param buildingsList
+     */
     public void setBuildingsList(List<Building> buildingsList) {
         this.buildingsList = buildingsList;
     }
@@ -70,25 +78,37 @@ public class Building {
     private List<Part> buildingAudio = new ArrayList<Part>();
     //Building Oject
     private Building tempBuilding;
-
+    //Building coordinates
     private String buildingCordinates;
-
+    //Error message
     private String outputMessage;
-    
+    //Optional building
     private String isOptional;
 
+    /**
+     *To get the building status
+     * @return
+     */
     public String getIsOptional() {
         return isOptional;
     }
 
+    /**
+     *To set whether building is optional
+     * @param isOptional
+     */
     public void setIsOptional(String isOptional) {
         this.isOptional = isOptional;
     }
-
+    //Tour position
     private int tourPosition;
-
+    //List of building positions
     private List<Integer> tourPositions = new ArrayList<>();
 
+    /**
+     *To get tour positions
+     * @return ListOF building position
+     */
     public List<Integer> getTourPositions() {
         tourPositions.clear();
         for (int i = 1; i <= this.getBuildingsList().size(); i++) {
@@ -97,32 +117,60 @@ public class Building {
         return tourPositions;
     }
 
+    /**
+     *to set the tour positions 
+     * @param tourPositions
+     */
     public void setTourPositions(List<Integer> tourPositions) {
         for (int i = 1; i <= this.getBuildingsList().size(); i++) {
             tourPositions.add(i);
         }
     }
 
+    /**
+     *to get the building position
+     * @return int
+     */
     public int getTourPosition() {
         return tourPosition;
     }
 
+    /**
+     *to set the building position
+     * @param tourPosition 
+     */
     public void setTourPosition(int tourPosition) {
         this.tourPosition = tourPosition;
     }
 
+    /**
+     *to get error message
+     * @return String
+     */
     public String getOutputMessage() {
         return outputMessage;
     }
 
+    /**
+     *To set error message
+     * @param outputMessage
+     */
     public void setOutputMessage(String outputMessage) {
         this.outputMessage = outputMessage;
     }
 
+    /**
+     *to get building coordinates
+     * @return building coordinates
+     */
     public String getBuildingCordinates() {
         return buildingCordinates;
     }
 
+    /**
+     *To set building coordinates
+     * @param buildingCordinates
+     */
     public void setBuildingCordinates(String buildingCordinates) {
         this.buildingCordinates = buildingCordinates;
     }
@@ -186,7 +234,7 @@ public class Building {
     /**
      * Method that gets the buildingName
      *
-     * @return
+     * @return buildingName
      */
     public String getBuildingName() {
         return buildingName;
@@ -330,9 +378,20 @@ public class Building {
         }
         return "inserted";
     }
+
+    /**
+     *To set the building position in tour
+     * @param b
+     * @param a
+     */
     public void setTourPositions(Building b,int a){
         buildingTourPosition.put(buildingName, a);
     }
+
+    /**
+     *To update tour position
+     * @return String to redirect page
+     */
     public String updateTourPosition() {
         for(int i=0;i<buildingsList.size();i++){
             try {
@@ -498,7 +557,7 @@ public class Building {
         return "updated";
     }
     /**
-     *
+     *To delete directory
      * @param file that need to be deleted
      * @return whether the file is deleted or not
      */
@@ -512,6 +571,13 @@ public class Building {
         return file.delete();
     }
 
+    /**
+     *
+     * @param part The uploaded file
+     * @return parts collections
+     * @throws ServletException
+     * @throws IOException
+     */
     public static Collection<Part> getAllParts(Part part) throws ServletException, IOException {
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         return request.getParts().stream().filter(p -> part.getName().equals(p.getName())).collect(Collectors.toList());
